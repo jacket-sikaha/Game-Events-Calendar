@@ -11,17 +11,10 @@ import PostNote from "./pages/PostNote";
 function App() {
   return (
     <>
-      <Layout />
-      <Box width="100%">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          {/* <Route index element={<Home />} /> */}
-          <Route path="postNote" element={<PostNote />} />
-          <Route path="personal" element={<Personal />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Box>
-      <Footer />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        {/* <Route index element={<Home />} /> */}
+      </Routes>
     </>
   );
 }

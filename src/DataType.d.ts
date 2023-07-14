@@ -1,28 +1,14 @@
-declare interface NoteDatatype {
-  id: number;
-  userId: number;
-  username: string;
-  userAvatar: string;
+declare interface AnnouncementListType {
+  ann_id: number;
   title: string;
+  subtitle: string;
+  banner: string;
   content: string;
-  images: string;
-  location: string;
-  feeling: string;
-  likes: number;
-  comments: number;
-  collections: number;
-  status: number;
-  createTime: string;
-}
-declare interface UserMsgDatatype {
-  id: number;
-  username: string;
-  nickname: string;
-  avatar: string;
-  introduction: string;
-  sex: string;
-  ip: string;
-  follows: number;
-  fans: number;
-  likes: number;
+  type_label: string;
+  tag_label: string;
+  tag_icon: string;
+  login_alert: number;
+  lang: string;
+  start_time: string;
+  end_time: string;
 }
