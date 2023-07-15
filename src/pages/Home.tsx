@@ -148,7 +148,7 @@ function Home() {
               login_alert: 1,
               lang: "zh-cn",
               start_time: "2023-06-07 07:00:00",
-              end_time: "2023-07-18 23:59:00",
+              end_time: "2023-07-11 23:59:00",
               type: 4,
               remind: 0,
               alert: 0,
@@ -517,26 +517,148 @@ function Home() {
       static_sign: "",
     },
   };
-
+  const b = [
+    {
+      id: 593,
+      type: 1,
+      title: "「普通关卡」掉落3倍",
+      start_time: "2023-07-08T21:00:00+00:00",
+      end_time: "2023-07-16T20:59:00+00:00",
+    },
+    {
+      id: 595,
+      type: 1,
+      title: "「圣迹调查&神殿调查」掉落2倍",
+      start_time: "2023-07-12T21:00:00+00:00",
+      end_time: "2023-07-15T20:59:00+00:00",
+    },
+    {
+      id: 596,
+      type: 1,
+      title: "「探索」掉落2倍",
+      start_time: "2023-07-12T21:00:00+00:00",
+      end_time: "2023-07-15T20:59:00+00:00",
+    },
+    {
+      id: 594,
+      type: 1,
+      title: "「地下城」玛那2倍",
+      start_time: "2023-07-12T21:00:00+00:00",
+      end_time: "2023-07-24T20:59:00+00:00",
+    },
+    {
+      id: 598,
+      type: 5,
+      title: "附奖扭蛋",
+      start_time: "2023-07-15T03:00:00+00:00",
+      end_time: "2023-07-19T02:59:00+00:00",
+    },
+    {
+      id: 597,
+      type: 5,
+      title: "「静流（夏日）」 PICK UP扭蛋",
+      start_time: "2023-07-15T06:00:00+00:00",
+      end_time: "2023-07-24T02:59:00+00:00",
+    },
+    {
+      id: 599,
+      type: 4,
+      title: "「露娜塔」",
+      start_time: "2023-07-16T04:00:00+00:00",
+      end_time: "2023-07-21T15:59:00+00:00",
+    },
+    {
+      id: 600,
+      type: 1,
+      title: "「高难关卡」掉落2倍",
+      start_time: "2023-07-16T21:00:00+00:00",
+      end_time: "2023-07-20T20:59:00+00:00",
+    },
+    {
+      id: 601,
+      type: 2,
+      title: "七夕剑客旅情谭",
+      start_time: "2023-07-18T04:00:00+00:00",
+      end_time: "2023-07-25T15:59:00+00:00",
+    },
+    {
+      id: 602,
+      type: 1,
+      title: "「圣迹调查」掉落2倍",
+      start_time: "2023-07-18T21:00:00+00:00",
+      end_time: "2023-07-21T20:59:00+00:00",
+    },
+    {
+      id: 603,
+      type: 5,
+      title: "附奖扭蛋",
+      start_time: "2023-07-19T03:00:00+00:00",
+      end_time: "2023-07-24T02:59:00+00:00",
+    },
+    {
+      id: 604,
+      type: 1,
+      title: "「困难关卡」掉落2倍",
+      start_time: "2023-07-20T21:00:00+00:00",
+      end_time: "2023-07-24T20:59:00+00:00",
+    },
+    {
+      id: 605,
+      type: 5,
+      title: "附奖扭蛋",
+      start_time: "2023-07-24T03:00:00+00:00",
+      end_time: "2023-07-31T02:59:00+00:00",
+    },
+    {
+      id: 606,
+      type: 1,
+      title: "「普通关卡」掉落3倍",
+      start_time: "2023-07-24T21:00:00+00:00",
+      end_time: "2023-07-30T20:59:00+00:00",
+    },
+    {
+      id: 607,
+      type: 1,
+      title: "「圣迹调查&神殿调查」掉落2倍",
+      start_time: "2023-07-24T21:00:00+00:00",
+      end_time: "2023-07-30T20:59:00+00:00",
+    },
+    {
+      id: 608,
+      type: 1,
+      title: "「探索」掉落2倍",
+      start_time: "2023-07-24T21:00:00+00:00",
+      end_time: "2023-08-04T20:59:00+00:00",
+    },
+    {
+      id: 609,
+      type: 3,
+      title: "「团队战」",
+      start_time: "2023-07-25T21:00:00+00:00",
+      end_time: "2023-07-30T15:59:00+00:00",
+    },
+  ];
   const obj = {
     value: dayjs(),
-    activity: a.data.list[0]?.list
-      ?.filter((item: AnnouncementListType) => {
-        return (
-          !ignored_ann_ids.includes(item.ann_id) &&
-          IGNORE_WORDS.every((word) => item.title.indexOf(word) === -1)
-        );
-      })
-      .map((item) => {
-        return {
-          title: item.title,
-          start_time: item.start_time,
-          end_time: item.end_time,
-          banner: item.banner,
-          content: item.content,
-          // aaa: dayjs(item.end_time).diff(dayjs(item.start_time), "day"),
-        };
-      }),
+    activity:
+      b ||
+      a.data.list[0]?.list
+        ?.filter((item: AnnouncementListType) => {
+          return (
+            !ignored_ann_ids.includes(item.ann_id) &&
+            IGNORE_WORDS.every((word) => item.title.indexOf(word) === -1)
+          );
+        })
+        .map((item) => {
+          return {
+            title: item.title,
+            start_time: item.start_time,
+            end_time: item.end_time,
+            banner: item.banner,
+            content: item.content,
+            // aaa: dayjs(item.end_time).diff(dayjs(item.start_time), "day"),
+          };
+        }),
   };
   return (
     <>

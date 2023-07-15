@@ -74,22 +74,18 @@ function Calendar({ value, activity }: CalendarProps) {
     }
     return radius;
   };
-  const date1 = dayjs("2023-06-07");
-  const date2 = dayjs("2023-06-08");
-  console.log("activity", activity);
-  console.log(
-    "asd",
-    dayjs("2023-06-07 24:00:00").isBetween(date1, date2, "day", "()"),
-    dayjs("2023-06-07 23:00:00").isSame(date1, "day")
-  );
+
   useEffect(() => {
     const temp = generateCalendarGrid(currentDate);
+    const sortActivity = activity.sort((a, b) => {
+      return dayjs(a.start_time).isBefore(b.start_time) ? -1 : 1;
+    });
     const result = new Map<string, CalendarGridItem[]>(
       [...temp].map((str) => [str, []])
     );
     // 0---不在范围内  1---是起始日期   2---是结束日期    3---处在两者之间
-    activity.forEach(({ title, start_time, end_time }) => {
-      [...temp].forEach((str) => {
+    [...temp].forEach((str) => {
+      sortActivity.forEach(({ title, start_time, end_time }) => {
         if (dayjs(str).isSame(start_time, "day")) {
           result.set(str, [
             ...(result.get(str) ?? []),
@@ -110,37 +106,19 @@ function Calendar({ value, activity }: CalendarProps) {
             { title, activity_status: 3 },
           ]);
         } else {
-          result.set(str, [
-            ...(result.get(str) ?? []),
-            { title: " ", activity_status: 0 },
-          ]);
+          // result.set(str, [
+          //   ...(result.get(str) ?? []),
+          //   { title: " ", activity_status: 0 },
+          // ]);
         }
       });
-      // const s = dayjs(start_time).format("YYYY-MM-DD");
-      // const e = dayjs(end_time).format("YYYY-MM-DD");
-      // if (temp.has(s)) {
-      //   if (result.has(s)) {
-      //     const old = { ...result.get(s) };
-      //     old.activity_status?.push(1);
-      //   } else {
-      //     result.set(s, { title, activity_status: [1] });
-      //   }
-      // }
-      // if (temp.has(e)) {
-      //   if (result.has(e)) {
-      //     const old = { ...result.get(e) };
-      //     old.activity_status?.push(2);
-      //   } else {
-      //     result.set(e, { title, activity_status: [2] });
-      //   }
-      // }
     });
+
     setCalendarGrid(result);
   }, [currentDate]);
-  console.log(calendarGrid);
   return (
     <>
-      <div className="max-w-2xl p-5 md:text-lg">
+      <div className="p-5">
         <nav className="flex justify-between items-center">
           <div
             onClick={() => {
@@ -184,8 +162,7 @@ function Calendar({ value, activity }: CalendarProps) {
             </svg>
           </div>
         </nav>
-
-        <div className="grid grid-cols-7 gap-[0.625rem] place-items-center py-5">
+        <div className="grid grid-cols-7 place-items-center py-5">
           <div>日</div>
           <div>一</div>
           <div>二</div>
@@ -194,40 +171,23 @@ function Calendar({ value, activity }: CalendarProps) {
           <div>五</div>
           <div>六</div>
         </div>
-        <div
-          className={`grid grid-cols-7 gap-[0.625rem] ${
-            collapse
-              ? "aspect-[1/1.75] place-items-start gap-x-0"
-              : "aspect-[4/3] place-items-center"
-          }`}
-        >
+
+        <div className={`grid grid-cols-7 aspect-[4/3] place-items-center`}>
           {[...(calendarGrid?.keys() ?? [])].map((_, i) => {
             return (
               <>
-                <div key={i} className="w-full text-center">
+                <div
+                  key={i}
+                  className="w-full h-full flex justify-center items-center"
+                >
                   {dayjs(_).format("D")}
-                  {calendarGrid?.get(_)?.map((item, index) => (
-                    <div
-                      // className={progressDisplay(
-                      //   item.activity_status ?? 0,
-                      //   index
-                      // )}
-                      className={`w-full ${progressDisplay(
-                        item.activity_status ?? 0
-                      )}`}
-                    >
-                      {item.activity_status === 0
-                        ? "xx"
-                        : item.title?.slice(0, 2)}
-                      {/* {item.title?.slice(0, 2)} */}
-                    </div>
-                  ))}
                 </div>
               </>
             );
           })}
         </div>
-        <div
+
+        {/* <div
           onClick={() => {
             setCollapse(!collapse);
           }}
@@ -246,7 +206,7 @@ function Calendar({ value, activity }: CalendarProps) {
               fill="#2563EB"
             />
           </svg>
-        </div>
+        </div> */}
       </div>
     </>
   );
