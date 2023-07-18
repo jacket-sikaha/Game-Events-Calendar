@@ -1,9 +1,11 @@
 import dayjs, { Dayjs } from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import { useEffect, useState } from "react";
+import "./index.css";
 import type { CalendarGridItem, CalendarProps } from "./CalendarType";
 dayjs.extend(isBetween);
-
+dayjs.extend(isSameOrAfter);
 const generateCalendarGrid = (date: Dayjs | string) => {
   const res = new Set<string>();
   const startM = dayjs(date).startOf("M");
@@ -14,7 +16,17 @@ const generateCalendarGrid = (date: Dayjs | string) => {
   Array.from({ length }).forEach((_, i) => {
     res.add(start.add(i, "day").format("YYYY-MM-DD"));
   });
-  return res;
+  const res2: string[][] = [];
+  const temp: string[] = [];
+  Array.from({ length }).forEach((_, i) => {
+    temp.push(start.add(i, "day").format("YYYY-MM-DD"));
+  });
+
+  for (let i = 0; i < temp.length; i += 7) {
+    res2.push(temp.slice(i, i + 7));
+  }
+  // console.log("res", res2);
+  return res2;
 };
 const rainbowColors = [
   "#FF0000",
@@ -25,7 +37,7 @@ const rainbowColors = [
   "#4B0082",
   "#8B00FF",
 ];
-function Calendar({ value, activity }: CalendarProps) {
+function Calendar({ value, activity, style }: CalendarProps) {
   const [currentDate, setCurrentDate] = useState(value);
   const [calendarGrid, setCalendarGrid] =
     useState<Map<string, CalendarGridItem[]>>();
@@ -36,25 +48,6 @@ function Calendar({ value, activity }: CalendarProps) {
     );
   };
 
-  // const progressDisplay = (activity_status: number, i: number): string => {
-  //   let radius = "";
-  //   switch (activity_status) {
-  //     case 1:
-  //       radius = "rounded-l-full";
-  //       break;
-  //     case 2:
-  //       radius = "rounded-r-full";
-  //       break;
-  //     case 3:
-  //       radius = "rounded-full";
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  //   return `w-full ${collapse ? "" : "hidden"} bg-red-${
-  //     (i + 1) * 100
-  //   } ${radius}`;
-  // };
   const progressDisplay = (activity_status: number): string => {
     let radius = `${
       !collapse ? "hidden" : activity_status ? "" : "invisible"
@@ -75,50 +68,54 @@ function Calendar({ value, activity }: CalendarProps) {
     return radius;
   };
 
-  useEffect(() => {
-    const temp = generateCalendarGrid(currentDate);
+  // 层级分配算法
+  const levelAssignment = () => {
+    // 记录每一层级的当前最新的结束日期
+    const check: Dayjs[] = [];
     const sortActivity = activity.sort((a, b) => {
       return dayjs(a.start_time).isBefore(b.start_time) ? -1 : 1;
     });
-    const result = new Map<string, CalendarGridItem[]>(
-      [...temp].map((str) => [str, []])
-    );
-    // 0---不在范围内  1---是起始日期   2---是结束日期    3---处在两者之间
-    [...temp].forEach((str) => {
-      sortActivity.forEach(({ title, start_time, end_time }) => {
-        if (dayjs(str).isSame(start_time, "day")) {
-          result.set(str, [
-            ...(result.get(str) ?? []),
-            { title, activity_status: 1 },
-          ]);
-          return;
-        }
-        if (dayjs(str).isSame(end_time, "day")) {
-          result.set(str, [
-            ...(result.get(str) ?? []),
-            { title, activity_status: 2 },
-          ]);
-          return;
-        }
-        if (dayjs(str).isBetween(start_time, end_time, "day", "[]")) {
-          result.set(str, [
-            ...(result.get(str) ?? []),
-            { title, activity_status: 3 },
-          ]);
-        } else {
-          // result.set(str, [
-          //   ...(result.get(str) ?? []),
-          //   { title: " ", activity_status: 0 },
-          // ]);
-        }
+    const res = sortActivity.map((item) => {
+      // const date1 = dayjs(start_time).format("YYYY-MM-DD");
+      // const date2 = dayjs(end_time).format("YYYY-MM-DD");
+      // const diffDays = dayjs(date1).diff(date2, "day", true) + 1;
+      const { id, title, start_time, end_time } = item;
+      if (check.length === 0) {
+        check.push(dayjs(end_time));
+        return { ...item, level: 1 };
+      }
+      const isNeedNewLine = check.findIndex((endDate) => {
+        return dayjs(start_time).isSameOrAfter(endDate);
       });
+      if (isNeedNewLine === -1) {
+        // 没有超过任一层级的最新的活动结束日期，就需要新建一行
+        check.push(dayjs(end_time));
+        return { ...item, level: check.length };
+      } else {
+        // 有 就在符合的层级进行添加，标记，并更新活动的结束日期
+        check[isNeedNewLine] = dayjs(end_time);
+        return { ...item, level: isNeedNewLine + 1 };
+      }
     });
-
-    setCalendarGrid(result);
-  }, [currentDate]);
+    console.log(
+      "r77es",
+      res.map(({ level }) => level)
+    );
+  };
+  levelAssignment();
+  console.log(
+    111,
+    // dayjs("2023-6-25").isBetween(
+    //   "2023-07-08T21:00:00+00:00",
+    //   "2023-07-16T20:59:00+00:00",
+    //   "day",
+    //   "[]"
+    // )
+    dayjs("2023-07-24").diff("2023-07-12", "day", true)
+  );
   return (
     <>
-      <div className="p-5">
+      <div className="p-5 flex flex-col overflow-hidden" style={style}>
         <nav className="flex justify-between items-center">
           <div
             onClick={() => {
@@ -162,51 +159,51 @@ function Calendar({ value, activity }: CalendarProps) {
             </svg>
           </div>
         </nav>
-        <div className="grid grid-cols-7 place-items-center py-5">
-          <div>日</div>
-          <div>一</div>
-          <div>二</div>
-          <div>三</div>
-          <div>四</div>
-          <div>五</div>
-          <div>六</div>
+        <div className="flex py-5 text-xs">
+          <div className="flex-1 text-center">周日</div>
+          <div className="flex-1 text-center">周一</div>
+          <div className="flex-1 text-center">周二</div>
+          <div className="flex-1 text-center">周三</div>
+          <div className="flex-1 text-center">周四</div>
+          <div className="flex-1 text-center">周五</div>
+          <div className="flex-1 text-center">周六</div>
         </div>
-
-        <div className={`grid grid-cols-7 aspect-[4/3] place-items-center`}>
-          {[...(calendarGrid?.keys() ?? [])].map((_, i) => {
+        {/* 父元素包裹一个子元素，两者分别采用relative和absolute，
+                  正常情况下子元素可以移动到父元素之外的任何位置，
+                  但父元素设置了overflow:auto的情况下，
+                  这种规则下跑出父元素宽高范围的子元素会撑开父元素来实现滚动（父元素还是原本的宽高，只多了滚动条）。
+                  这样就能在每个日期下面的有限范围里展示我们的日程，
+                  显示不完的也可以滚动下拉 */}
+        <div className="grid grid-cols-1 text-xs h-full border">
+          {[...generateCalendarGrid(currentDate)].map((_, i) => {
             return (
-              <>
-                <div
-                  key={i}
-                  className="w-full h-full flex justify-center items-center"
-                >
-                  {dayjs(_).format("D")}
+              <div className="relative w-full overflow-y-auto" key={i}>
+                <div className="flex">
+                  {_.map((__, j) => {
+                    return (
+                      <div
+                        key={j}
+                        className="w-full h-full flex justify-center"
+                      >
+                        {dayjs(__).format("D")}
+                      </div>
+                    );
+                  })}
                 </div>
-              </>
+
+                <div className="text-xs w-full">
+                  <div className={`absolute bg-blue-400 span1`}>55555555</div>
+                  <div
+                    className={`block absolute bg-red-400 span2 top-[8em] overflow-hidden`}
+                  >
+                    55555555
+                  </div>
+                  <div className={`absolute bg-green-400 span3`}>55555555</div>
+                </div>
+              </div>
             );
           })}
         </div>
-
-        {/* <div
-          onClick={() => {
-            setCollapse(!collapse);
-          }}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 16 16"
-            fill="none"
-          >
-            <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-              d="M7.64599 4.646C7.69244 4.59944 7.74761 4.56249 7.80836 4.53729C7.8691 4.51208 7.93422 4.49911 7.99999 4.49911C8.06576 4.49911 8.13088 4.51208 8.19162 4.53729C8.25237 4.56249 8.30754 4.59944 8.35399 4.646L14.354 10.646C14.4479 10.7399 14.5006 10.8672 14.5006 11C14.5006 11.1328 14.4479 11.2601 14.354 11.354C14.2601 11.4479 14.1328 11.5006 14 11.5006C13.8672 11.5006 13.7399 11.4479 13.646 11.354L7.99999 5.707L2.35399 11.354C2.2601 11.4479 2.13277 11.5006 1.99999 11.5006C1.86721 11.5006 1.73988 11.4479 1.64599 11.354C1.5521 11.2601 1.49936 11.1328 1.49936 11C1.49936 10.8672 1.5521 10.7399 1.64599 10.646L7.64599 4.646Z"
-              fill="#2563EB"
-            />
-          </svg>
-        </div> */}
       </div>
     </>
   );

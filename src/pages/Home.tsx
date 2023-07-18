@@ -642,8 +642,16 @@ function Home() {
     value: dayjs(),
     activity:
       b ||
+      // .map((item) => {
+      //   return {
+      //     id: item.id,
+      //     title: item.title,
+      //     start_time: item.startTime || "",
+      //     end_time: item.endTime || "",
+      //   };
+      // })
       a.data.list[0]?.list
-        ?.filter((item: AnnouncementListType) => {
+        ?.filter((item) => {
           return (
             !ignored_ann_ids.includes(item.ann_id) &&
             IGNORE_WORDS.every((word) => item.title.indexOf(word) === -1)
@@ -651,6 +659,7 @@ function Home() {
         })
         .map((item) => {
           return {
+            id: item.ann_id,
             title: item.title,
             start_time: item.start_time,
             end_time: item.end_time,
@@ -662,7 +671,7 @@ function Home() {
   };
   return (
     <>
-      <Calendar {...obj}></Calendar>
+      <Calendar style={{ height: "85vh" }} {...obj}></Calendar>
     </>
   );
 }

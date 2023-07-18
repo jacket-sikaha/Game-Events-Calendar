@@ -24,4 +24,4 @@ dist-ssr
 *.sw?
 .env
 package-lock.json
-asd.html
+asd.js

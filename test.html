@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .calendar {
+        margin: 33px;
+        width: 200px;
+        height: 150px;
+        font-family: Arial, sans-serif;
+        background: #ff6363;
+        position: relative;
+        overflow: auto;
+      }
+
+      .header {
+        text-align: center;
+      }
+
+      .events {
+        position: absolute;
+        background: #1fc6f9;
+        width: 50px;
+        height: 50px;
+        top: 200px;
+      }
+
+      .b {
+        margin: 200px;
+        width: 200px;
+        height: 150px;
+        /* position: relative; */
+        font-family: Arial, sans-serif;
+        background: #03ff4a;
+        overflow: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="calendar">
+      父元素包裹一个子元素，两者分别采用relative和absolute，正常情况下子元素可以移动到父元素之外的任何位置，但父元素设置了overflow:auto的情况下，这种规则下跑出父元素宽高范围的子元素会撑开父元素来实现滚动（父元素还是原本的宽高，只多了滚动条）。
+      <div class="events">
+        <!-- Events will be dynamically added here -->
+      </div>
+    </div>
+
+    <div class="b">
+      对比
+      <br />
+      父元素包裹一个子元素，两者分别采用relative和absolute，正常情况下子元素可以移动到父元素之外的任何位置，但父元素设置了overflow:auto的情况下，这种规则下跑出父元素宽高范围的子元素会撑开父元素来实现滚动（父元素还是原本的宽高，只多了滚动条）。
+      <div class="events">
+        <!-- Events will be dynamically added here -->
+      </div>
+    </div>
+  </body>
+</html>

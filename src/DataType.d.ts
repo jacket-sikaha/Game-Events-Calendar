@@ -1,4 +1,5 @@
 declare interface AnnouncementListType {
+  id: number;
   ann_id: number;
   title: string;
   subtitle: string;
