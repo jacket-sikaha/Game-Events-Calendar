@@ -25,7 +25,10 @@ function Calendar({ value, activity, style }: CalendarProps) {
 
   return (
     <>
-      <div className="p-5 flex flex-col overflow-hidden" style={style}>
+      <div
+        className="p-5 flex flex-col h-full min-h-[26rem]"
+        style={{ ...style }}
+      >
         <nav className="flex justify-between items-center">
           <div
             className="cursor-pointer"
@@ -86,7 +89,7 @@ function Calendar({ value, activity, style }: CalendarProps) {
                   这种规则下跑出父元素宽高范围的子元素会撑开父元素来实现滚动（父元素还是原本的宽高，只多了滚动条）。
                   这样就能在每个日期下面的有限范围里展示我们的日程，
                   显示不完的也可以滚动下拉 */}
-        <div className="grid grid-cols-1 text-xs h-full border-x border-b">
+        <div className="flex-1 grid grid-cols-1 text-xs h-full border-x border-b">
           {generateCalendarGrid(currentDate).map((_, i) => {
             return (
               <div className="relative w-full overflow-y-auto" key={i}>
@@ -110,7 +113,7 @@ function Calendar({ value, activity, style }: CalendarProps) {
                   })}
                 </div>
                 {/* 日程区 */}
-                <div className="text-xs w-full">
+                <div className="w-full">
                   {eventGridPosition[i]?.map((obj) => {
                     const { id, title, left, width, level, color } = obj;
                     return (
@@ -126,7 +129,8 @@ function Calendar({ value, activity, style }: CalendarProps) {
                             left !== 0 && left !== 7
                               ? `calc(${left}00%/7)`
                               : "",
-                          top: `${20 * level + "%"}`,
+                          // top: `${20 * level + "%"}`, // 百分比受限于最上层元素的高度变化
+                          top: `${1.35 * level}em`, // em只受限于离其最近的父元素（简单嵌套情况）
                         }}
                       >
                         {title}

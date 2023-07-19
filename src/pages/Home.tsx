@@ -664,7 +664,12 @@ function Home() {
   // 检验日历组件
   return (
     <>
-      <Calendar {...obj} style={{ height: "90vh" }}></Calendar>
+      <div
+        className="border resize overflow-auto"
+        // style={{ width: "350px", height: "200px" }}
+      >
+        <Calendar {...obj}></Calendar>
+      </div>
     </>
   );
 }
