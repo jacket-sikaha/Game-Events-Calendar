@@ -642,14 +642,6 @@ function Home() {
     value: dayjs(),
     activity:
       b ||
-      // .map((item) => {
-      //   return {
-      //     id: item.id,
-      //     title: item.title,
-      //     start_time: item.startTime || "",
-      //     end_time: item.endTime || "",
-      //   };
-      // })
       a.data.list[0]?.list
         ?.filter((item) => {
           return (
@@ -669,9 +661,10 @@ function Home() {
           };
         }),
   };
+  // 检验日历组件
   return (
     <>
-      <Calendar style={{ height: "85vh" }} {...obj}></Calendar>
+      <Calendar {...obj} style={{ height: "90vh" }}></Calendar>
     </>
   );
 }

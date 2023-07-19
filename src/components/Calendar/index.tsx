@@ -1,123 +1,34 @@
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import { useEffect, useState } from "react";
 import "./index.css";
-import type { CalendarGridItem, CalendarProps } from "./CalendarType";
+import type { CalendarProps, CalendarWeekItem } from "./CalendarType";
+import { calculateEventPosition, generateCalendarGrid } from "./utils";
 dayjs.extend(isBetween);
 dayjs.extend(isSameOrAfter);
-const generateCalendarGrid = (date: Dayjs | string) => {
-  const res = new Set<string>();
-  const startM = dayjs(date).startOf("M");
-  const endM = dayjs(date).endOf("M");
-  const start = startM.subtract(parseInt(startM.format("d")), "day");
-  const end = endM.add(6 - parseInt(endM.format("d")), "day");
-  const length = end.diff(start, "day") + 1;
-  Array.from({ length }).forEach((_, i) => {
-    res.add(start.add(i, "day").format("YYYY-MM-DD"));
-  });
-  const res2: string[][] = [];
-  const temp: string[] = [];
-  Array.from({ length }).forEach((_, i) => {
-    temp.push(start.add(i, "day").format("YYYY-MM-DD"));
-  });
 
-  for (let i = 0; i < temp.length; i += 7) {
-    res2.push(temp.slice(i, i + 7));
-  }
-  // console.log("res", res2);
-  return res2;
-};
-const rainbowColors = [
-  "#FF0000",
-  "#FF7F00",
-  "#FFFF00",
-  "#00FF00",
-  "#0000FF",
-  "#4B0082",
-  "#8B00FF",
-];
 function Calendar({ value, activity, style }: CalendarProps) {
   const [currentDate, setCurrentDate] = useState(value);
-  const [calendarGrid, setCalendarGrid] =
-    useState<Map<string, CalendarGridItem[]>>();
-  const [collapse, setCollapse] = useState(false);
+  const [eventGridPosition, setEventGridPosition] = useState<
+    CalendarWeekItem[][]
+  >([]);
   const handleMonChange = (type: boolean) => {
     setCurrentDate(
       type ? currentDate.add(1, "month") : currentDate.subtract(1, "month")
     );
   };
 
-  const progressDisplay = (activity_status: number): string => {
-    let radius = `${
-      !collapse ? "hidden" : activity_status ? "" : "invisible"
-    } `;
-    switch (activity_status) {
-      case 1:
-        radius += `bg-[#50d71e] rounded-l-full`;
-        break;
-      case 2:
-        radius += `bg-[#50d71e] rounded-r-full`;
-        break;
-      case 3:
-        radius += `bg-[#50d71e] rounded-none`;
-        break;
-      default:
-        break;
-    }
-    return radius;
-  };
+  useEffect(() => {
+    setEventGridPosition(calculateEventPosition(currentDate, activity));
+  }, [currentDate]);
 
-  // 层级分配算法
-  const levelAssignment = () => {
-    // 记录每一层级的当前最新的结束日期
-    const check: Dayjs[] = [];
-    const sortActivity = activity.sort((a, b) => {
-      return dayjs(a.start_time).isBefore(b.start_time) ? -1 : 1;
-    });
-    const res = sortActivity.map((item) => {
-      // const date1 = dayjs(start_time).format("YYYY-MM-DD");
-      // const date2 = dayjs(end_time).format("YYYY-MM-DD");
-      // const diffDays = dayjs(date1).diff(date2, "day", true) + 1;
-      const { id, title, start_time, end_time } = item;
-      if (check.length === 0) {
-        check.push(dayjs(end_time));
-        return { ...item, level: 1 };
-      }
-      const isNeedNewLine = check.findIndex((endDate) => {
-        return dayjs(start_time).isSameOrAfter(endDate);
-      });
-      if (isNeedNewLine === -1) {
-        // 没有超过任一层级的最新的活动结束日期，就需要新建一行
-        check.push(dayjs(end_time));
-        return { ...item, level: check.length };
-      } else {
-        // 有 就在符合的层级进行添加，标记，并更新活动的结束日期
-        check[isNeedNewLine] = dayjs(end_time);
-        return { ...item, level: isNeedNewLine + 1 };
-      }
-    });
-    console.log(
-      "r77es",
-      res.map(({ level }) => level)
-    );
-  };
-  levelAssignment();
-  console.log(
-    111,
-    // dayjs("2023-6-25").isBetween(
-    //   "2023-07-08T21:00:00+00:00",
-    //   "2023-07-16T20:59:00+00:00",
-    //   "day",
-    //   "[]"
-    // )
-    dayjs("2023-07-24").diff("2023-07-12", "day", true)
-  );
   return (
     <>
       <div className="p-5 flex flex-col overflow-hidden" style={style}>
         <nav className="flex justify-between items-center">
           <div
+            className="cursor-pointer"
             onClick={() => {
               handleMonChange(false);
             }}
@@ -139,6 +50,7 @@ function Calendar({ value, activity, style }: CalendarProps) {
           </div>
           <div>{currentDate.format("YYYY[年] M[月]")}</div>
           <div
+            className="cursor-pointer"
             onClick={() => {
               handleMonChange(true);
             }}
@@ -174,31 +86,53 @@ function Calendar({ value, activity, style }: CalendarProps) {
                   这种规则下跑出父元素宽高范围的子元素会撑开父元素来实现滚动（父元素还是原本的宽高，只多了滚动条）。
                   这样就能在每个日期下面的有限范围里展示我们的日程，
                   显示不完的也可以滚动下拉 */}
-        <div className="grid grid-cols-1 text-xs h-full border">
-          {[...generateCalendarGrid(currentDate)].map((_, i) => {
+        <div className="grid grid-cols-1 text-xs h-full border-x border-b">
+          {generateCalendarGrid(currentDate).map((_, i) => {
             return (
               <div className="relative w-full overflow-y-auto" key={i}>
-                <div className="flex">
+                {/* 日历区 */}
+                <div className="flex h-full">
                   {_.map((__, j) => {
                     return (
                       <div
                         key={j}
-                        className="w-full h-full flex justify-center"
+                        className="w-full h-full flex justify-center items-start even:border-x border-t"
                       >
-                        {dayjs(__).format("D")}
+                        {value.isSame(__, "day") ? (
+                          <span className="w-full text-center bg-red-100">
+                            {dayjs(__).format("D")}
+                          </span>
+                        ) : (
+                          dayjs(__).format("D")
+                        )}
                       </div>
                     );
                   })}
                 </div>
-
+                {/* 日程区 */}
                 <div className="text-xs w-full">
-                  <div className={`absolute bg-blue-400 span1`}>55555555</div>
-                  <div
-                    className={`block absolute bg-red-400 span2 top-[8em] overflow-hidden`}
-                  >
-                    55555555
-                  </div>
-                  <div className={`absolute bg-green-400 span3`}>55555555</div>
+                  {eventGridPosition[i]?.map((obj) => {
+                    const { id, title, left, width, level, color } = obj;
+                    return (
+                      <div
+                        key={id}
+                        className={
+                          "absolute rounded-lg pl-2 overflow-hidden text-ellipsis whitespace-nowrap"
+                        }
+                        style={{
+                          backgroundColor: color,
+                          width: `calc((${width}00%/7))`,
+                          left:
+                            left !== 0 && left !== 7
+                              ? `calc(${left}00%/7)`
+                              : "",
+                          top: `${20 * level + "%"}`,
+                        }}
+                      >
+                        {title}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             );

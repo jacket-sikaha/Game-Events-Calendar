@@ -1,20 +1,27 @@
 import { Dayjs } from "dayjs";
 
+export declare interface CalendarActivity {
+  id: number;
+  title: string;
+  start_time: string;
+  end_time: string;
+  banner?: string;
+  content?: string;
+}
 export declare interface CalendarProps {
   value: Dayjs;
-  activity: {
-    id: string;
-    title: string;
-    start_time: string;
-    end_time: string;
-    banner: string;
-    content: string;
-  }[];
+  activity: CalendarActivity[];
   style?: React.CSSProperties;
 }
 
-export declare interface CalendarGridItem {
-  id?: string;
-  title?: string;
-  activity_status?: number; // 0---不在范围内  1---是起始日期   2---是结束日期    3---处在两者之间
+export declare interface CalendarWeekItem {
+  id: number;
+  title: string;
+  start_time: string;
+  end_time: string;
+  // 渲染到日历对应位置所需要参数
+  color: string;
+  level: number; // top
+  left: number;
+  width: number;
 }
