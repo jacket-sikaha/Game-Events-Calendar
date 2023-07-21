@@ -1,4 +1,4 @@
-import Calendar from "../components/Calendar";
+import EventCalendar from "../components/EventCalendar";
 import dayjs from "dayjs";
 
 const ignored_ann_ids = [
@@ -667,7 +667,7 @@ function Home() {
         className="resize overflow-auto"
         // style={{ width: "350px", height: "200px" }}
       >
-        <Calendar style={{ resize: "both" }} {...obj}></Calendar>
+        <EventCalendar style={{ resize: "both" }} {...obj}></EventCalendar>
       </div>
     </>
   );

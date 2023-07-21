@@ -13,7 +13,7 @@ import {
 dayjs.extend(isBetween);
 dayjs.extend(isSameOrAfter);
 
-function Calendar({ value, activity, style }: CalendarProps) {
+function EventCalendar({ value, activity, style }: CalendarProps) {
   const [currentDate, setCurrentDate] = useState(value);
   const [showActivityOverview, setShowActivityOverview] = useState(true);
   const [eventGridPosition, setEventGridPosition] = useState<
@@ -253,4 +253,4 @@ function Calendar({ value, activity, style }: CalendarProps) {
   );
 }
 
-export default Calendar;
+export default EventCalendar;
