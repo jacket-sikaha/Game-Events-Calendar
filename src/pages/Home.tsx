@@ -1,4 +1,3 @@
-import React from "react";
 import Calendar from "../components/Calendar";
 import dayjs from "dayjs";
 
@@ -665,10 +664,10 @@ function Home() {
   return (
     <>
       <div
-        className="border resize overflow-auto"
+        className="resize overflow-auto"
         // style={{ width: "350px", height: "200px" }}
       >
-        <Calendar {...obj}></Calendar>
+        <Calendar style={{ resize: "both" }} {...obj}></Calendar>
       </div>
     </>
   );

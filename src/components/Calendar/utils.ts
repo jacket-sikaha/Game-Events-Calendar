@@ -2,14 +2,14 @@ import dayjs, { Dayjs } from "dayjs";
 import { CalendarActivity, CalendarWeekItem } from "./CalendarType";
 // import classNames from "classnames";
 
-const rainbowColors = [
-  "#FF0000",
-  "#FF7F00",
-  "#FFFF00",
-  "#00FF00",
-  "#8cd2ff",
-  "#c576ff",
-  "#8B00FF",
+export const rainbowColors = [
+  "#fca5a5",
+  "#fdba74",
+  "#fde047",
+  "#86efac",
+  "#5eead4",
+  "#93c5fd",
+  "#d8b4fe",
 ];
 
 export const generateCalendarGrid = (date: Dayjs | string) => {

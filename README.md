@@ -26,6 +26,29 @@
 
   [详细版参考：vue-simple-calendar](https://tallent.us/vue-simple-calendar/)
 
-#### 详细版预览图
+##### 详细版预览图
 
 ![详细版预览图](http://dns.huagecloud.top:8097/api/files/1689761920259.png)
+
+------
+
+##### 日历组件详细版介绍使用：
+
+```tsx
+export declare interface CalendarActivity {
+  id: number;
+  title: string;
+  start_time: string;
+  end_time: string;
+  banner?: string; //非必填
+  content?: string; //非必填
+}
+export declare interface CalendarProps {
+  value: Dayjs;
+  activity: CalendarActivity[];
+  style?: React.CSSProperties;
+}
+```
+
+value和activity是必传参数（具体见上面），组件呈现的宽高默认由内容来撑起，内容显示不全也会支持滚动查看，使用者可以按自己想法额外添加样式规定具体的宽高
+

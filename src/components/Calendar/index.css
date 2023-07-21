@@ -1,16 +1,44 @@
 /* 滚动条整体样式 */
-::-webkit-scrollbar {
-  width: 0px;
+.myScrollbar::-webkit-scrollbar {
+  width: 3px;
 }
 
 /* 滚动条拇指（滑块）样式 */
-::-webkit-scrollbar-thumb {
+.myScrollbar::-webkit-scrollbar-thumb {
   background-color: #888;
   border-radius: 5px;
 }
 
 /* 滚动条轨道样式 */
-::-webkit-scrollbar-track {
+.myScrollbar::-webkit-scrollbar-track {
   background-color: #f1f1f1;
   border-radius: 5px;
+}
+
+.invisibleScrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* 都执行一次情况下，animation的动画执行完一次会回到原点，transition不会  */
+/* animation适合做循环动画/官方页面logo一进来就播放展示；transition适合元素尺寸的过度变化 */
+.Slide {
+  width: 12rem;
+  transition: all 0.6s ease; /* 过渡宽度属性，持续时间为0.3秒，缓动类型为ease */
+}
+.Slide.collapsed {
+  width: 3rem; /* 缩小后的侧边栏宽度 */
+  transition: all 0.6s ease;
+}
+
+.activityList {
+  overflow-wrap: break-word; /* 强制换行.不然文字超过宽度就有滚动条 */
+  opacity: 1;
+  overflow: auto;
+  transition: all 0.6s ease;
+}
+.activityList.collapsed {
+  overflow-wrap: normal;
+  opacity: 0;
+  overflow: hidden;
+  transition: all 0.6s ease;
 }
