@@ -1,4 +1,4 @@
-import EventCalendar from "../components/EventCalendar";
+// import EventCalendar from "../components/EventCalendar";
 import dayjs from "dayjs";
 
 const ignored_ann_ids = [
@@ -29,7 +29,7 @@ const IGNORE_WORDS = [
   "无名勋礼",
 ];
 
-function Home() {
+function Genshin() {
   const a = {
     retcode: 0,
     message: "OK",
@@ -664,13 +664,13 @@ function Home() {
   return (
     <>
       <div
-      // className="resize overflow-auto"
-      // style={{ width: "350px", height: "200px" }}
+        className="resize overflow-auto"
+        // style={{ width: "350px", height: "200px" }}
       >
-        <EventCalendar {...obj}></EventCalendar>
+        {/* <EventCalendar style={{ resize: "both" }} {...obj}></EventCalendar> */}
       </div>
     </>
   );
 }
 
-export default Home;
+export default Genshin;
