@@ -1,5 +1,6 @@
 // import EventCalendar from "../components/EventCalendar";
 import dayjs from "dayjs";
+import EventCalendar from "../components/EventCalendar";
 
 const ignored_ann_ids = [
   194, // 有奖问卷调查开启！
@@ -663,12 +664,7 @@ function Genshin() {
   // 检验日历组件
   return (
     <>
-      <div
-        className="resize overflow-auto"
-        // style={{ width: "350px", height: "200px" }}
-      >
-        {/* <EventCalendar style={{ resize: "both" }} {...obj}></EventCalendar> */}
-      </div>
+      <EventCalendar style={{ resize: "both" }} {...obj} />
     </>
   );
 }

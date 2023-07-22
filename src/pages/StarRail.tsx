@@ -663,12 +663,7 @@ function Genshin() {
   // 检验日历组件
   return (
     <>
-      <div
-        className="resize overflow-auto"
-        // style={{ width: "350px", height: "200px" }}
-      >
-        <EventCalendar style={{ resize: "both" }} {...obj}></EventCalendar>
-      </div>
+      <EventCalendar style={{ resize: "both" }} {...obj} />
     </>
   );
 }
