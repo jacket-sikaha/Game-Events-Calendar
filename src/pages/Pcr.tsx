@@ -9,7 +9,7 @@ import { BACKEND_URL } from "../services/note";
 
 function Pcr() {
   const [eventData, setEventData] = useState<CalendarActivity[]>();
-  const { data, isFetching } = useQuery({
+  const { isFetching } = useQuery({
     queryKey: ["pcr"],
     queryFn: () => axios(`${BACKEND_URL}/pcr`),
     onSuccess(data: { data: any[] }) {

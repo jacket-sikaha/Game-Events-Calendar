@@ -31,7 +31,7 @@ const IGNORE_WORDS = [
 
 function Genshin() {
   const [eventData, setEventData] = useState<CalendarActivity[]>();
-  const { data, isFetching } = useQuery({
+  const { isFetching } = useQuery({
     queryKey: ["genshin"],
     queryFn: () => axios(`${BACKEND_URL}/genshin`),
     onSuccess(data: any) {

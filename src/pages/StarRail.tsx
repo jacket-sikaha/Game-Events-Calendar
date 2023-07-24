@@ -42,7 +42,7 @@ const IGNORE_WORDS = [
 
 function StarRail() {
   const [eventData, setEventData] = useState<CalendarActivity[]>();
-  const { data, isFetching } = useQuery({
+  const { isFetching } = useQuery({
     queryKey: ["starrail"],
     queryFn: () => axios(`${BACKEND_URL}/starrail`),
     onSuccess(data: any) {
