@@ -5,6 +5,7 @@ import {
 	Router, // the Router itself
 	withParams, // middleware to extract params into the Request itself
 } from 'itty-router';
+import { getFGOEventWithDetailTime } from './util';
 
 // create the CORS pair
 const { preflight, corsify } = createCors({
@@ -46,6 +47,15 @@ router
 		}
 	})
 
+	.get('/fgo', async (_, env) => {
+		try {
+			const data = await getFGOEventWithDetailTime(env.VITE_FGOEventList_API);
+			return { code: 200, data };
+		} catch (error: any) {
+			return error(500, error.message);
+		}
+	})
+
 	// *any* HTTP method works, even ones you make up
 	.puppy('/secret', () => 'Because why not?')
 
@@ -55,6 +65,7 @@ export interface Env {
 	VITE_PCR_API: string;
 	VITE_GENSHIN_API: string;
 	VITE_STARRAIL_API: string;
+	VITE_FGOEventList_API: string;
 }
 
 export default {
