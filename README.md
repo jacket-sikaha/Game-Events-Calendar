@@ -36,9 +36,12 @@
 
 ### demo 页面
 
-[https://gameevent-frontend.pages.dev/](https://gameevent-frontend.pages.dev/)
+[https://gameevent.sikara.asia](https://gameevent.sikara.asia)
 
-------
+目前已接入游戏：PCR 原神 星穹铁道 FGO
+精确度目前暂时精确到天，后续看情况细分到分钟
+
+---
 
 #### 警告：本项目仅供学习参考使用
 
