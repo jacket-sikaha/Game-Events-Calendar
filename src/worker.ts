@@ -10,7 +10,12 @@ import { getFGOEventWithDetailTime } from './util';
 // create the CORS pair
 const { preflight, corsify } = createCors({
 	methods: ['GET', 'PATCH', 'POST', 'OPTION'],
-	origins: ['https://gameevent-frontend.pages.dev', 'http://localhost:5173', 'https://d7b65e5b.gameevent-frontend.pages.dev'],
+	origins: [
+		'https://gameevent-frontend.pages.dev',
+		'http://localhost:5173',
+		'https://d7b65e5b.gameevent-frontend.pages.dev',
+		'https://gameevent.sikara.asia',
+	],
 	// headers: {
 	//   'my-funky-header': 'is pretty funky indeed',
 	// },
