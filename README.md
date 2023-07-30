@@ -38,7 +38,7 @@
 
 [https://gameevent.sikara.asia](https://gameevent.sikara.asia)
 
-目前已接入游戏：PCR 原神 星穹铁道 FGO
+目前已接入游戏：PCR 原神 星穹铁道 FGO 明日方舟
 精确度目前暂时精确到天，后续看情况细分到分钟
 
 ---

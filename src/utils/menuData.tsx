@@ -2,6 +2,7 @@ import Pcr from "../pages/Pcr";
 import Genshin from "../pages/Genshin";
 import StarRail from "../pages/StarRail";
 import FGO from "../pages/FGO";
+import Arknights from "../pages/Arknights";
 
 // 懒加载组件 要配合Suspense使用，避免白屏问题
 // fast fresh问题 懒加载的组件里不能额外再导出别的东西
@@ -32,6 +33,12 @@ export const menuList: menuItem[] = [
     path: "/fgo",
     icon: "https://fgo.wiki/images/thumb/a/a2/%E6%96%AF%E5%8D%A1%E5%93%88%C2%B7%E6%96%AF%E5%8D%A1%E8%92%82%28Ruler%29_status_1.png/150px-%E6%96%AF%E5%8D%A1%E5%93%88%C2%B7%E6%96%AF%E5%8D%A1%E8%92%82%28Ruler%29_status_1.png",
     element: <FGO />,
+  },
+  {
+    name: "明日方舟",
+    path: "/arknights",
+    icon: " https://prts.wiki/images/3/3a/%E5%A4%B4%E5%83%8F_%E7%BC%AA%E5%B0%94%E8%B5%9B%E6%80%9D.png",
+    element: <Arknights />,
   },
   // {
   //   name: "xxxx",
