@@ -28,7 +28,7 @@ const getAKEventDetail = async (url: string) => {
 	}
 	const event = title?.map((title, i) => {
 		const [start_time, end_time] = parseStrToTime(time![i]) || [null, null];
-		return { title, start_time, end_time };
+		return { id: `${data.cid}${i}`, title, start_time, end_time };
 	});
 	return event;
 };
