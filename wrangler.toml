@@ -11,6 +11,8 @@ VITE_PCR_API = "https://pcr.satroki.tech/api/Manage/GetEvents?s=cn"
 VITE_GENSHIN_API = "https://hk4e-api.mihoyo.com/common/hk4e_cn/announcement/api/getAnnList?game=hk4e&game_biz=hk4e_cn&lang=zh-cn&bundle_id=hk4e_cn&platform=pc&region=cn_gf01&level=55&uid=100000000"
 VITE_STARRAIL_API = "https://hkrpg-api-static.mihoyo.com/common/hkrpg_cn/announcement/api/getAnnList?game=hkrpg&game_biz=hkrpg_cn&lang=zh-cn&bundle_id=hkrpg_cn&platform=pc&region=prod_gf_cn&level=30&uid=11111111"
 VITE_FGOEventList_API = "https://api.biligame.com/news/list.action?gameExtensionId=45&positionId=2&pageNum=1&pageSize=10&typeId="
+VITE_AKEventList_API = "https://ak-webview.hypergryph.com/api/game/bulletinList?target=IOS"
+VITE_AKEventDetail_API = "https://ak-webview.hypergryph.com/api/game/bulletin"
 
 # Variable bindings. These are arbitrary, plaintext strings (similar to environment variables)
 # Note: Use secrets to store sensitive data.

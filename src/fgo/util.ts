@@ -1,4 +1,4 @@
-import { FGOData } from './fgo/DataType';
+import { FGOData } from './DataType';
 
 const getFGOEventList = async (eventsUrl: string): Promise<string[]> => {
 	const res = await fetch(eventsUrl);
