@@ -30,9 +30,16 @@ export const generateCalendarGrid = (date: Dayjs | string) => {
 };
 
 // 层级分配算法
+// 日程的排布逻辑细节：
+// - 日程越早的排的层级越高
+// - 日程一旦确定层级就是连续的，直至结束还是确定好的层级位置
+// - 为了保证空间充分利用，一个新日程的起始日期要加入，会看当前每个层级进行日程的结束时间，
+// 从高到低一旦有个层级结束日期等于或早过新日程的起始日期，新日程就是这个层级接着排布下去
 export const levelAssignment = (events: CalendarActivity[]) => {
   // 记录每一层级的当前最新的结束日期
+  // 用于判断新日程是直接接在某层级日程的后面还是为新日程添加新层级
   const check: Dayjs[] = [];
+  // 按日程的起始日期进行排序
   const sortActivity = events.sort((a, b) => {
     return dayjs(a.start_time).isBefore(b.start_time) ? -1 : 1;
   });
@@ -42,6 +49,7 @@ export const levelAssignment = (events: CalendarActivity[]) => {
       check.push(dayjs(end_time));
       return { ...item, level: 1 };
     }
+    // 遍历层级，是否需要另起一行
     const isNeedNewLine = check.findIndex((endDate) => {
       return dayjs(start_time).isSameOrAfter(endDate);
     });
@@ -74,12 +82,15 @@ export const calculateEventPosition = (
     const thisWeekEvents = [];
     for (let j = 0; j < eventsWithLevel.length; j++) {
       const { start_time, end_time } = eventsWithLevel[j];
+      // 控制日程在这一周的显示起始位置 left 和结束位置 width
       let left = 0;
       let width = 0;
       week.forEach((day) => {
+        // 判断这周的第 n 天是否在当前日程的起始和结束时间内
         if (dayjs(day).isBetween(start_time, end_time, "day", "[]")) {
           width++;
         }
+        // 不在就向左偏移一格，空出这一天
         if (width === 0) {
           left++;
         }

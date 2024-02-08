@@ -19,6 +19,7 @@ function EventCalendar({ value, activity, style }: CalendarProps) {
   const [eventGridPosition, setEventGridPosition] = useState<
     CalendarWeekItem[][]
   >([]);
+
   const handleMonChange = (type: boolean) => {
     setCurrentDate(
       type ? currentDate.add(1, "month") : currentDate.subtract(1, "month")
@@ -27,7 +28,7 @@ function EventCalendar({ value, activity, style }: CalendarProps) {
 
   useEffect(() => {
     setEventGridPosition(calculateEventPosition(currentDate, activity));
-  }, [currentDate]);
+  }, [currentDate, activity]);
 
   return (
     <>
@@ -61,7 +62,6 @@ function EventCalendar({ value, activity, style }: CalendarProps) {
               />
             </svg>
           </div>
-
           <>
             {levelAssignment(activity).map((item, i) => {
               return (
@@ -81,13 +81,13 @@ function EventCalendar({ value, activity, style }: CalendarProps) {
                     <div className="mx-auto rounded-md">
                       <img
                         src={item?.banner}
-                        alt={"product.imageAlt"}
+                        alt={item?.title}
                         className="h-full w-full object-scale-down sm:object-scale-down"
                       />
                     </div>
                   )}
                   <div className="mt-2 flex flex-col items-center">
-                    <div className="text-xs text-gray-700">
+                    <div className="text-gray-700">
                       <span
                         className="inline-block my-auto mx-[0.2rem] rounded-full"
                         style={{
@@ -117,11 +117,11 @@ function EventCalendar({ value, activity, style }: CalendarProps) {
                       </span>
                       {item.title}
                     </div>
-                    <div className="text-[8px] font-mono text-gray-500">{`${dayjs(
+                    <div className="text-xs font-mono text-gray-500">{`${dayjs(
                       item.start_time
-                    ).format("MM/DD")}-${dayjs(item.end_time).format(
-                      "MM/DD"
-                    )}`}</div>
+                    ).format("YYYY/MM/DD HH:mm")} ~ ${dayjs(
+                      item.end_time
+                    ).format("YYYY/MM/DD HH:mm")}`}</div>
                   </div>
                 </div>
               );

@@ -25,7 +25,7 @@ export const menuList: menuItem[] = [
   {
     name: "星穹铁道",
     path: "/starrail",
-    icon: "https://starrailstation.com/assets/9dcc998c64c6aedefa5d9507a356bcfa4230077449edba27a6581f4d009c113a.webp",
+    icon: "https://upload-bbs.mihoyo.com/upload/2022/04/28/dc4106543564d1a372b47f5a3cf15958_994599019851288826.png?x-oss-process=image/resize,s_150/quality,q_80/auto-orient,0/interlace,1/format,jpg",
     element: <StarRail />,
   },
   {
@@ -37,7 +37,8 @@ export const menuList: menuItem[] = [
   {
     name: "明日方舟",
     path: "/arknights",
-    icon: " https://prts.wiki/images/3/3a/%E5%A4%B4%E5%83%8F_%E7%BC%AA%E5%B0%94%E8%B5%9B%E6%80%9D.png",
+    icon: "https://prts.wiki/images/f/f2/%E5%A4%B4%E5%83%8F_%E9%BB%8D.png",
+    // icon: "https://prts.wiki/images/3/3a/%E5%A4%B4%E5%83%8F_%E7%BC%AA%E5%B0%94%E8%B5%9B%E6%80%9D.png",
     element: <Arknights />,
   },
   // {
