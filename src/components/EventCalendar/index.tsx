@@ -19,6 +19,7 @@ function EventCalendar({ value, activity, style }: CalendarProps) {
   const [eventGridPosition, setEventGridPosition] = useState<
     CalendarWeekItem[][]
   >([]);
+  const [collapseIdx, setCollapseIdx] = useState(-1);
 
   const handleMonChange = (type: boolean) => {
     setCurrentDate(
@@ -199,8 +200,11 @@ function EventCalendar({ value, activity, style }: CalendarProps) {
             {generateCalendarGrid(currentDate).map((_, i) => {
               return (
                 <div
-                  className="relative overflow-y-auto invisibleScrollbar flex-1 bg-gray-200"
+                  className={`relative overflow-y-auto invisibleScrollbar bg-gray-200 ${
+                    collapseIdx === i ? "flex-3" : "flex-1"
+                  }`}
                   key={i}
+                  onClick={() => setCollapseIdx(collapseIdx === i ? -1 : i)}
                 >
                   {/* 日历区 */}
                   <div className="grid grid-cols-7 sticky top-0 z-50 bg-white">

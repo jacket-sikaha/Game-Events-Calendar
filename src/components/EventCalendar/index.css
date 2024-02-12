@@ -28,6 +28,7 @@
 .Slide.collapsed {
   /* 缩小后的侧边栏宽度 */
   width: 3rem;
+  overflow: hidden; /* 缩小后高度会拉伸开来但不需要滚动条显示 */
   transition: all 0.6s ease;
 }
 
