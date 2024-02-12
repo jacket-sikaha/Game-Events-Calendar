@@ -29,6 +29,7 @@ function FGO() {
             item.end_time = dayjs(item.end_time, "YYYY M D", "zh-cn").format(
               "YYYY-MM-DD"
             );
+            item.range = item.content ?? undefined;
             return item;
           })
       );

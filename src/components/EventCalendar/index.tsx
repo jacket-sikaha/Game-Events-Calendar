@@ -33,21 +33,22 @@ function EventCalendar({ value, activity, style }: CalendarProps) {
   return (
     <>
       <div
-        className="flex border rounded-lg h-full min-h-[26rem] "
+        className="flex border rounded-lg max-h-[30rem] min-h-[450px]"
         style={{ ...style }}
       >
         {/* 活动概览列表 */}
         <div
-          className={`myScrollbar flex flex-col items-center overflow-y-auto overflow-x-hidden py-3 px-4 bg-[#F8FAFC] border-r 
+          className={`myScrollbar overflow-y-auto overflow-x-hidden py-3 px-4 bg-[#F8FAFC] border 
           ${showActivityOverview ? "Slide" : "Slide collapsed"}`}
         >
           <div
-            className="mx-auto mb-1 cursor-pointer transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300"
+            className="mb-1 cursor-pointer transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300"
             onClick={() => {
               setShowActivityOverview(!showActivityOverview);
             }}
           >
             <svg
+              className="mx-auto"
               xmlns="http://www.w3.org/2000/svg"
               width="16"
               height="16"
@@ -62,7 +63,7 @@ function EventCalendar({ value, activity, style }: CalendarProps) {
               />
             </svg>
           </div>
-          <>
+          <div>
             {levelAssignment(activity).map((item, i) => {
               return (
                 <div
@@ -82,14 +83,14 @@ function EventCalendar({ value, activity, style }: CalendarProps) {
                       <img
                         src={item?.banner}
                         alt={item?.title}
-                        className="h-full w-full object-scale-down sm:object-scale-down"
+                        className="object-contain max-sm:object-scale-down"
                       />
                     </div>
                   )}
                   <div className="mt-2 flex flex-col items-center">
-                    <div className="text-gray-700">
+                    <div className="text-gray-700 max-sm:text-xs">
                       <span
-                        className="inline-block my-auto mx-[0.2rem] rounded-full"
+                        className="inline-block mx-[0.2rem] rounded-full"
                         style={{
                           backgroundColor:
                             rainbowColors[i % rainbowColors.length],
@@ -117,20 +118,23 @@ function EventCalendar({ value, activity, style }: CalendarProps) {
                       </span>
                       {item.title}
                     </div>
-                    <div className="text-xs font-mono text-gray-500">{`${dayjs(
-                      item.start_time
-                    ).format("YYYY/MM/DD HH:mm")} ~ ${dayjs(
-                      item.end_time
-                    ).format("YYYY/MM/DD HH:mm")}`}</div>
+                    <div className="text-xs max-sm:text-[10px] font-mono text-gray-500">
+                      {item.range ??
+                        `${dayjs(item.start_time).format(
+                          "YYYY/MM/DD HH:mm"
+                        )} ~ ${dayjs(item.end_time).format(
+                          "YYYY/MM/DD HH:mm"
+                        )}`}
+                    </div>
                   </div>
                 </div>
               );
             })}
-          </>
+          </div>
         </div>
 
         {/* 日历日程显示 */}
-        <div className="flex-1 p-5 flex flex-col">
+        <div className="flex-1 p-5 border flex flex-col">
           <nav className="flex justify-between items-center">
             <div
               className="cursor-pointer"
@@ -176,7 +180,7 @@ function EventCalendar({ value, activity, style }: CalendarProps) {
               </svg>
             </div>
           </nav>
-          <div className="flex py-5 text-xs">
+          <div className="flex py-3 text-xs">
             <div className="flex-1 text-center">周日</div>
             <div className="flex-1 text-center">周一</div>
             <div className="flex-1 text-center">周二</div>
@@ -191,23 +195,23 @@ function EventCalendar({ value, activity, style }: CalendarProps) {
                   这种规则下跑出父元素宽高范围的子元素会撑开父元素来实现滚动（父元素还是原本的宽高，只多了滚动条）。
                   这样就能在每个日期下面的有限范围里展示我们的日程，
                   显示不完的也可以滚动下拉 */}
-          <div className="flex-1 grid grid-cols-1 text-xs h-full border-x border-b">
+          <div className="flex-1 text-xs border-x border-b flex flex-col overflow-auto">
             {generateCalendarGrid(currentDate).map((_, i) => {
               return (
                 <div
-                  className="relative w-full overflow-y-auto invisibleScrollbar"
+                  className="relative overflow-y-auto invisibleScrollbar flex-1 bg-gray-200"
                   key={i}
                 >
                   {/* 日历区 */}
-                  <div className="flex h-full">
+                  <div className="grid grid-cols-7 sticky top-0 z-50 bg-white">
                     {_.map((__, j) => {
                       return (
                         <div
                           key={j}
-                          className="w-full h-full flex justify-center items-start even:border-x border-t"
+                          className="w-full flex justify-center items-start even:border-x border-t"
                         >
                           {value.isSame(__, "day") ? (
-                            <span className="w-full text-center bg-red-100">
+                            <span className="w-full text-center bg-red-500">
                               {dayjs(__).format("D")}
                             </span>
                           ) : (
@@ -218,15 +222,13 @@ function EventCalendar({ value, activity, style }: CalendarProps) {
                     })}
                   </div>
                   {/* 日程区 */}
-                  <div className="w-full">
+                  <div>
                     {eventGridPosition[i]?.map((obj) => {
                       const { id, title, left, width, level, color } = obj;
                       return (
                         <div
                           key={id}
-                          className={
-                            "absolute rounded-lg pl-2 overflow-hidden text-ellipsis whitespace-nowrap border border-cyan-50"
-                          }
+                          className="absolute rounded-lg pl-2 overflow-hidden text-ellipsis whitespace-nowrap border border-cyan-50"
                           style={{
                             backgroundColor: color,
                             width: `calc((${width}00%/7))`,

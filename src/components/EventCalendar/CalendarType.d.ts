@@ -7,6 +7,7 @@ export declare interface CalendarActivity {
   end_time: string;
   banner?: string;
   content?: string;
+  range?: string;
 }
 export declare interface CalendarProps {
   value: Dayjs;
