@@ -3,8 +3,13 @@ import { Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout";
 import { menuList } from "./utils/menuData";
 import NotFound from "./components/NotFound";
+import { useEffect } from "react";
 
 function App() {
+  useEffect(() => {
+    console.log("采用GitHub action，push后自动部署到cloudfare page");
+  }, []);
+
   return (
     <>
       <Layout>
