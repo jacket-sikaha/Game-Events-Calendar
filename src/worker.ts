@@ -16,6 +16,7 @@ const { preflight, corsify } = createCors({
 		'http://localhost:5173',
 		'https://d7b65e5b.gameevent-frontend.pages.dev',
 		'https://gameevent.sikara.asia',
+		'https://ge.lee-sikaha.cloudns.ch',
 	],
 	// headers: {
 	//   'my-funky-header': 'is pretty funky indeed',

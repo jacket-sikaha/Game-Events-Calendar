@@ -1,11 +1,11 @@
-name = "test"                     # 对应你账号worker里的部署的项目名称
+name = "gebackend"                     # 对应你账号worker里的部署的项目名称
 main = "src/worker.ts"
 compatibility_date = "2023-07-17"
 send_metrics = true
 # Define top-level environment variables
 # under the `[vars]` block using
 # the `key = "value"` format
-# "gameevent-backend"
+# "gebackend"
 [vars]
 VITE_PCR_API = "https://pcr.satroki.tech/api/Manage/GetEvents?s=cn"
 VITE_GENSHIN_API = "https://hk4e-api.mihoyo.com/common/hk4e_cn/announcement/api/getAnnList?game=hk4e&game_biz=hk4e_cn&lang=zh-cn&bundle_id=hk4e_cn&platform=pc&region=cn_gf01&level=55&uid=100000000"

@@ -1,6 +1,6 @@
 {
-	"name": "test",
-	"version": "0.0.0",
+	"name": "gebackend",
+	"version": "0.0.1",
 	"private": true,
 	"scripts": {
 		"deploy": "wrangler deploy",
@@ -8,11 +8,11 @@
 		"publish": "wrangler publish"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20230419.0",
+		"@cloudflare/workers-types": "^4.20240614.0",
 		"typescript": "^5.0.4",
-		"wrangler": "^3.0.0"
+		"wrangler": "^3.60.3"
 	},
 	"dependencies": {
-		"itty-router": "^4.0.14"
+		"itty-router": "^4.2.2"
 	}
 }
