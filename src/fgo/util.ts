@@ -1,4 +1,12 @@
 import { FGOData } from './DataType';
+import * as cheerio from 'cheerio';
+
+// cf worker的node环境更特别一些，jsdom所需要的node依赖和worker不完全兼容
+// cheerio
+const getImgBanner = (htmlStr: string) => {
+	const $ = cheerio.load(htmlStr);
+	return $('img').attr('src');
+};
 
 const getFGOEventList = async (eventsUrl: string): Promise<string[]> => {
 	const res = await fetch(eventsUrl);
@@ -12,10 +20,11 @@ const getFGOEventDetail = async (url: string) => {
 	const res = await fetch(url);
 	const data = ((await res.json()) as { data: FGOData }).data;
 	const temp = data.content.match(/[0-9]{4}年[0-9]{1,2}月[0-9]{1,2}日.{1,}为止/gm);
+	const banner = getImgBanner(data.content);
 	let start_time;
 	let end_time;
 	if (!temp) {
-		return { ...data, content: temp, start_time, end_time };
+		return { ...data, content: temp, start_time, end_time, banner };
 	}
 	const matchArr = temp[0].match(/[0-9]{4}年[0-9]{1,2}月[0-9]{1,2}日/gm);
 	start_time = matchArr && matchArr[0];
@@ -23,7 +32,7 @@ const getFGOEventDetail = async (url: string) => {
 		end_time = matchArr[1];
 	}
 	end_time = start_time?.slice(0, 5) + temp[0].match(/[0-9]{1,2}月[0-9]{1,2}日/gm)![1];
-	return { ...data, content: temp, start_time, end_time };
+	return { ...data, content: temp, start_time, end_time, banner };
 };
 
 const getFGOEventWithDetailTime = async (eventsUrl: string) => {
@@ -36,4 +45,4 @@ const getFGOEventWithDetailTime = async (eventsUrl: string) => {
 	return temp;
 };
 
-export { getFGOEventWithDetailTime };
+export { getFGOEventWithDetailTime, getImgBanner };

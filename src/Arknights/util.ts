@@ -1,5 +1,6 @@
-import { AKData, AKEventData } from './DataType';
 // import { asd, qwe } from './test';
+
+import { AKData, AKEventData } from './DataType';
 
 const titleReg = /[一二三四五六七八九十]{1,2}、[^一二三四五六七八九十]+(?=活动时间：)/gm;
 const timeReg = /(?<=[一二三四五六七八九十]{1,2}、[^一二三四五六七八九十]+)活动时间：.+?-.+?\d{1,2}:\d{2}/gm;

@@ -5,8 +5,8 @@ import {
 	Router, // the Router itself
 	withParams, // middleware to extract params into the Request itself
 } from 'itty-router';
-import { getFGOEventWithDetailTime } from './FGO/util';
-import { getAKEventWithDetailTime } from './Arknights/util';
+import { getFGOEventWithDetailTime, getImgBanner } from './fgo/util';
+import { getAKEventWithDetailTime } from './arknights/util';
 
 // create the CORS pair
 const { preflight, corsify } = createCors({
@@ -66,6 +66,33 @@ router
 	.get('/ak', async (_, env) => {
 		try {
 			const data = await getAKEventWithDetailTime(env.VITE_AKEventList_API, env.VITE_AKEventDetail_API);
+			return { code: 200, data };
+		} catch (error: any) {
+			return error(500, error.message);
+		}
+	})
+
+	.get('/imgfromhtml', async (_, env) => {
+		try {
+			const data = await getImgBanner(`<p class="p">
+			<img src="//i0.hdslb.com/bfs/game/e0dece0d867b9dd83e9030d289a6ddae1a9590f7.png" alt="" />
+		</p>
+		<p class="p">
+			<img src="//i0.hdslb.com/bfs/game/4eda66d6f82b88c2903ff8a660cecac077c0821a.png" alt="" />
+		</p>
+		<p class="p">
+			<span style="color:#003399;">◆</span>活动时间<span style="color:#003399;">◆</span>
+		</p>
+		<p class="p">
+			2024年7月25日（周四）维护后~8月11日（周日）13:59为止
+		</p>
+		<p class="p">
+			<br />
+		</p>
+		<p class="p">
+			<img src="//i0.hdslb.com/bfs/game/646d58b443193dd98e95b9452749b893a3335a93.png" alt="" />
+		</p>
+		  `);
 			return { code: 200, data };
 		} catch (error: any) {
 			return error(500, error.message);

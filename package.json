@@ -13,6 +13,7 @@
 		"wrangler": "^3.60.3"
 	},
 	"dependencies": {
+		"cheerio": "1.0.0-rc.12",
 		"itty-router": "^4.2.2"
 	}
 }
