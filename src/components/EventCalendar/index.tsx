@@ -85,6 +85,7 @@ function EventCalendar({ value, activity, style }: CalendarProps) {
                         src={item?.banner}
                         alt={item?.title}
                         className="object-contain max-sm:object-scale-down"
+                        referrerPolicy="same-origin"
                       />
                     </div>
                   )}
