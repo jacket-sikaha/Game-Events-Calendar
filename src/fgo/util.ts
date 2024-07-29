@@ -32,7 +32,7 @@ const getFGOEventDetail = async (url: string) => {
 		end_time = matchArr[1];
 	}
 	end_time = start_time?.slice(0, 5) + temp[0].match(/[0-9]{1,2}月[0-9]{1,2}日/gm)![1];
-	return { ...data, content: temp, start_time, end_time, banner };
+	return { ...data, content: temp[0], start_time, end_time, banner };
 };
 
 const getFGOEventWithDetailTime = async (eventsUrl: string) => {
