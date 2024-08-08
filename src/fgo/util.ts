@@ -19,7 +19,7 @@ const getFGOEventList = async (eventsUrl: string): Promise<string[]> => {
 const getFGOEventDetail = async (url: string) => {
 	const res = await fetch(url);
 	const data = ((await res.json()) as { data: FGOData }).data;
-	const temp = data.content.match(/[0-9]{4}年[0-9]{1,2}月[0-9]{1,2}日.{1,}为止/gm);
+	const temp = data.content.match(/[0-9]{4}年[0-9]{1,2}月[0-9]{1,2}日[^\<\>]+?为止/gm);
 	const banner = getImgBanner(data.content);
 	let start_time;
 	let end_time;
