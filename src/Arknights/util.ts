@@ -1,16 +1,19 @@
 // import { asd, qwe } from './test';
 
+import { getImgBanner } from '../fgo/util';
 import { AKData, AKEventData } from './DataType';
 
 const titleReg = /[一二三四五六七八九十]{1,2}、[^一二三四五六七八九十]+(?=活动时间：)/gm;
 const timeReg = /(?<=[一二三四五六七八九十]{1,2}、[^一二三四五六七八九十]+)活动时间：.+?-.+?\d{1,2}:\d{2}/gm;
 const specialReg = /\d{1,2}月\d{1,2}日.+?-.+?\d{1,2}:\d{1,2}/;
+const activitiesHtmlReg =
+	/<div[^<]+<img[^<]+\/><\/div><p>\s*<strong>[一二三四五六七八九十]{1,2}[^<>]+?<\/strong><\/p><p>\s*<strong>活动时间：<\/strong>[^<]+<\/p>/gm;
 
 function stripHtmlTags(html: string) {
 	return html.replace(/<[^>]*>/g, '');
 }
 
-const getAKPopupEvent = async (eventList: string, eventDetail: string): Promise<any> => {
+const getAKPopupEvent = async (eventList: string, eventDetail: string) => {
 	const res = await fetch(eventList);
 	// const data = ((await res.json()) as AKData).data.popup.defaultPopup;
 	// return `${eventDetail}/${data}`;
@@ -24,12 +27,14 @@ const getAKEventDetail = async (url: string) => {
 	const text = stripHtmlTags(data.content);
 	const title = text.match(titleReg);
 	const time = text.match(timeReg);
+	const html = data.content.match(activitiesHtmlReg);
 	if (!title && !time) {
 		return [];
 	}
 	const event = title?.map((title, i) => {
 		const [start_time, end_time] = parseStrToTime(time![i]) || [null, null];
-		return { id: `${data.cid}${i}`, title, start_time, end_time };
+		const banner = html && getImgBanner(html[i]);
+		return { id: `${data.cid}${i}`, title, start_time, end_time, banner };
 	});
 	return event;
 };
@@ -57,12 +62,8 @@ const parseStrToTime = (str: string) => {
 
 const getAKEventWithDetailTime = async (eventList: string, eventDetail: string) => {
 	const events = await getAKPopupEvent(eventList, eventDetail);
-	const temp = [];
-	for (let i = 0; i < events.length; i++) {
-		const data = (await getAKEventDetail(events[i])) ?? [];
-		data?.length > 0 && temp.push(data);
-	}
-	return temp.flatMap((item) => item);
+	const data = await Promise.all(events.map((e) => getAKEventDetail(e)));
+	return data.flatMap((item) => item);
 };
 
 export { getAKEventWithDetailTime };

@@ -37,12 +37,7 @@ const getFGOEventDetail = async (url: string) => {
 
 const getFGOEventWithDetailTime = async (eventsUrl: string) => {
 	const events = await getFGOEventList(eventsUrl);
-	const temp = [];
-	for (let i = 0; i < events.length; i++) {
-		const data = await getFGOEventDetail(events[i]);
-		temp.push(data);
-	}
-	return temp;
+	return await Promise.all(events.map((e) => getFGOEventDetail(e)));
 };
 
 export { getFGOEventWithDetailTime, getImgBanner };
