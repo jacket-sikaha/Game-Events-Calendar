@@ -37,7 +37,7 @@ export const menuList: menuItem[] = [
   {
     name: "明日方舟",
     path: "/arknights",
-    icon: "https://prts.wiki/images/f/f2/%E5%A4%B4%E5%83%8F_%E9%BB%8D.png",
+    icon: "https://media.prts.wiki/6/66/%E5%A4%B4%E5%83%8F_%E7%BB%B4%E4%BB%80%E6%88%B4%E5%B0%94.png",
     // icon: "https://prts.wiki/images/3/3a/%E5%A4%B4%E5%83%8F_%E7%BC%AA%E5%B0%94%E8%B5%9B%E6%80%9D.png",
     element: <Arknights />,
   },

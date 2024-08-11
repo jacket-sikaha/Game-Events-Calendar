@@ -17,10 +17,10 @@ function Arknights() {
     onSuccess(data: any) {
       setEventData(
         data?.data?.data
-          ?.filter((item: any) => {
+          ?.filter((item: CalendarActivity) => {
             return Boolean(item.start_time);
           })
-          .map((item: any) => {
+          .map((item: CalendarActivity) => {
             item.start_time = dayjs(
               item.start_time,
               "YYYY M D HH:mm",
