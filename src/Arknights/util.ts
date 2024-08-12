@@ -1,5 +1,3 @@
-// import { asd, qwe } from './test';
-
 import { getImgBanner } from '../fgo/util';
 import { AKData, AKEventData } from './DataType';
 

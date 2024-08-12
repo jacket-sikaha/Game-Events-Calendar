@@ -7,6 +7,7 @@ import {
 } from 'itty-router';
 import { getFGOEventWithDetailTime, getImgBanner } from './fgo/util';
 import { getAKEventWithDetailTime } from './arknights/util';
+import { getPunishingEvent, getWutheringWavesEvent } from './kuro-game/util';
 
 // create the CORS pair
 const { preflight, corsify } = createCors({
@@ -72,9 +73,27 @@ router
 		}
 	})
 
+	.get('/mc', async (_, env) => {
+		try {
+			const data = await getWutheringWavesEvent(env.VITE_KURO_WIKI_GAME_API);
+			return { code: 200, data };
+		} catch (error: any) {
+			return error(500, error.message);
+		}
+	})
+
+	.get('/pns', async (_, env) => {
+		try {
+			const data = await getPunishingEvent(env.VITE_KURO_WIKI_GAME_API);
+			return { code: 200, data };
+		} catch (error: any) {
+			return error(500, error.message);
+		}
+	})
+
 	.get('/imgfromhtml', async (_, env) => {
 		try {
-			const data = await getImgBanner(`<p class="p">
+			const data = getImgBanner(`<p class="p">
 			<img src="//i0.hdslb.com/bfs/game/e0dece0d867b9dd83e9030d289a6ddae1a9590f7.png" alt="" />
 		</p>
 		<p class="p">
@@ -111,6 +130,7 @@ export interface Env {
 	VITE_FGOEventList_API: string;
 	VITE_AKEventList_API: string;
 	VITE_AKEventDetail_API: string;
+	VITE_KURO_WIKI_GAME_API: string;
 }
 
 export default {
