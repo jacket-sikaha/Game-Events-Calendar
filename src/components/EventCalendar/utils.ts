@@ -126,3 +126,20 @@ export const parseClassName = (event: CalendarWeekItem): string => {
   //   [`left-[calc(${left}00%/7)]`]: left !== 0 && left !== 7,
   // });
 };
+
+// 已结束的活动往后排序，优先展示正在进行的活动
+export const eventOverviewListSorting = (events: CalendarActivity[]) => {
+  const endEventList: CalendarActivity[] = [];
+  let idx = 0;
+  while (idx <= events.length - 1) {
+    const element = events[idx];
+    if (dayjs().isAfter(element.end_time)) {
+      events.splice(idx, 1);
+      element && endEventList.push({ ...element, isEnd: true });
+    } else {
+      idx++;
+    }
+  }
+  events.push(...endEventList);
+  return events;
+};
