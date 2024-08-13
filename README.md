@@ -36,10 +36,17 @@
 
 ### demo 页面
 
-[https://gameevent.sikara.asia](https://gameevent.sikara.asia)
+[https://gameevent-frontend.pages.dev/](https://gameevent-frontend.pages.dev/)
 
 目前已接入游戏：PCR 原神 星穹铁道 FGO 明日方舟
 精确度目前暂时精确到天，后续看情况细分到分钟
+
+---
+
+- 2024/2/13 调整日历布局和日历显示，不再因侧边栏伸缩而出现高度变化，支持点击对应的周日程控制其高度折叠
+- 2024/7/27 使用 cheerio 提取出 fgo 的 banner 图
+- 2024/8/10 提取出明日方舟的 banner 图
+- 2024/8/13 新增接入游戏：鸣潮，战双帕弥什，点击图片支持预览
 
 ---
 
