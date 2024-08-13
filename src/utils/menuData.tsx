@@ -3,6 +3,8 @@ import Genshin from "../pages/Genshin";
 import StarRail from "../pages/StarRail";
 import FGO from "../pages/FGO";
 import Arknights from "../pages/Arknights";
+import WutheringWaves from "../pages/wuthering-waves";
+import Pns from "../pages/Pns";
 
 // 懒加载组件 要配合Suspense使用，避免白屏问题
 // fast fresh问题 懒加载的组件里不能额外再导出别的东西
@@ -40,6 +42,18 @@ export const menuList: menuItem[] = [
     icon: "https://media.prts.wiki/6/66/%E5%A4%B4%E5%83%8F_%E7%BB%B4%E4%BB%80%E6%88%B4%E5%B0%94.png",
     // icon: "https://prts.wiki/images/3/3a/%E5%A4%B4%E5%83%8F_%E7%BC%AA%E5%B0%94%E8%B5%9B%E6%80%9D.png",
     element: <Arknights />,
+  },
+  {
+    name: "鸣潮",
+    path: "/mc",
+    icon: "https://prod-alicdn-community.kurobbs.com/postBanner/1721276570014265525.png",
+    element: <WutheringWaves />,
+  },
+  {
+    name: "战双帕弥什",
+    path: "/pns",
+    icon: "https://prod-alicdn-community.kurobbs.com/forum/243f9583d24142bba43633972763294120240505.png",
+    element: <Pns />,
   },
   // {
   //   name: "xxxx",

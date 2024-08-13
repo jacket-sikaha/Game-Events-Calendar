@@ -10,6 +10,7 @@ import {
   levelAssignment,
   rainbowColors,
 } from "./utils";
+import { Image } from "antd";
 dayjs.extend(isBetween);
 dayjs.extend(isSameOrAfter);
 
@@ -80,8 +81,8 @@ function EventCalendar({ value, activity, style }: CalendarProps) {
                   // }`}
                 >
                   {item?.banner && (
-                    <div className="mx-auto rounded-md">
-                      <img
+                    <div className="mx-auto rounded-md flex justify-center">
+                      <Image
                         src={item?.banner}
                         alt={item?.title}
                         className="object-contain max-sm:object-scale-down"

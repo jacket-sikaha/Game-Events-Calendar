@@ -21,6 +21,7 @@ function Arknights() {
             return Boolean(item.start_time);
           })
           .map((item: CalendarActivity) => {
+            // 带中文的日期格式dayjs都不能直接识别
             item.start_time = dayjs(
               item.start_time,
               "YYYY M D HH:mm",
