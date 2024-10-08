@@ -1,9 +1,10 @@
+import { Image } from "antd";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
+import type { CalendarProps } from "./CalendarType";
 import "./index.css";
-import type { CalendarProps, CalendarWeekItem } from "./CalendarType";
 import {
   calculateEventPosition,
   eventOverviewListSorting,
@@ -11,16 +12,13 @@ import {
   levelAssignment,
   rainbowColors,
 } from "./utils";
-import { Image } from "antd";
 dayjs.extend(isBetween);
 dayjs.extend(isSameOrAfter);
 
 function EventCalendar({ value, activity, style }: CalendarProps) {
   const [currentDate, setCurrentDate] = useState(value);
   const [showActivityOverview, setShowActivityOverview] = useState(true);
-  const [eventGridPosition, setEventGridPosition] = useState<
-    CalendarWeekItem[][]
-  >([]);
+
   const [collapseIdx, setCollapseIdx] = useState(-1);
 
   const handleMonChange = (type: boolean) => {
@@ -29,9 +27,10 @@ function EventCalendar({ value, activity, style }: CalendarProps) {
     );
   };
 
-  useEffect(() => {
-    setEventGridPosition(calculateEventPosition(currentDate, activity));
-  }, [currentDate, activity]);
+  const eventGridPosition = useMemo(
+    () => calculateEventPosition(currentDate, activity),
+    [currentDate, activity]
+  );
 
   return (
     <>
