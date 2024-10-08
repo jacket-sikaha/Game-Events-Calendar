@@ -1,10 +1,10 @@
-import Pcr from "../pages/Pcr";
-import Genshin from "../pages/Genshin";
-import StarRail from "../pages/StarRail";
-import FGO from "../pages/FGO";
-import Arknights from "../pages/Arknights";
-import WutheringWaves from "../pages/wuthering-waves";
-import Pns from "../pages/Pns";
+import Pcr from "@/pages/Pcr";
+import Genshin from "@/pages/Genshin";
+import StarRail from "@/pages/StarRail";
+import FGO from "@/pages/FGO";
+import Arknights from "@/pages/Arknights";
+import WutheringWaves from "@/pages/wuthering-waves";
+import Pns from "@/pages/Pns";
 
 // 懒加载组件 要配合Suspense使用，避免白屏问题
 // fast fresh问题 懒加载的组件里不能额外再导出别的东西

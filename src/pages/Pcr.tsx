@@ -1,11 +1,11 @@
 import { useQuery } from "react-query";
-import EventCalendar from "../components/EventCalendar";
+import EventCalendar from "@/components/EventCalendar";
 import dayjs from "dayjs";
 import axios from "axios";
-import Loading from "../components/Loading";
+import Loading from "@/components/Loading";
 import { useState } from "react";
-import { CalendarActivity } from "../components/EventCalendar/CalendarType";
-import { BACKEND_URL } from "../services/note";
+import { CalendarActivity } from "@/components/EventCalendar/CalendarType";
+import { BACKEND_URL } from "@/services/note";
 
 function Pcr() {
   const [eventData, setEventData] = useState<CalendarActivity[]>();

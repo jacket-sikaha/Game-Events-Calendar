@@ -1,8 +1,8 @@
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
-import Layout from "./components/Layout";
-import { menuList } from "./utils/menuData";
-import NotFound from "./components/NotFound";
+import Layout from "@/components/Layout";
+import { menuList } from "@/utils/menuData";
+import NotFound from "@/components/NotFound";
 import { useEffect } from "react";
 
 function App() {

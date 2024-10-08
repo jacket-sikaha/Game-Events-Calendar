@@ -1,12 +1,12 @@
-// import EventCalendar from "../components/EventCalendar";
+// import EventCalendar from "@/components/EventCalendar";
 import dayjs from "dayjs";
-import EventCalendar from "../components/EventCalendar";
 import { useState } from "react";
 import { useQuery } from "react-query";
-import { CalendarActivity } from "../components/EventCalendar/CalendarType";
-import Loading from "../components/Loading";
+import { CalendarActivity } from "@/components/EventCalendar/CalendarType";
+import Loading from "@/components/Loading";
 import axios from "axios";
-import { BACKEND_URL } from "../services/note";
+import { BACKEND_URL } from "@/services/note";
+import EventCalendar from "@/components/EventCalendar";
 
 const ignored_ann_ids = [
   495, // 有奖问卷调查开启！

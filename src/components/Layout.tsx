@@ -12,7 +12,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
-import { menuList } from "../utils/menuData";
+import { menuList } from "@/utils/menuData";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const drawerWidth = 220;

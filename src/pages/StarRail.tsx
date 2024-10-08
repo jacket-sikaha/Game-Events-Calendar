@@ -1,11 +1,11 @@
 import axios from "axios";
 import { useState } from "react";
 import { useQuery } from "react-query";
-import EventCalendar from "../components/EventCalendar";
+import EventCalendar from "@/components/EventCalendar";
 import dayjs from "dayjs";
-import { CalendarActivity } from "../components/EventCalendar/CalendarType";
-import Loading from "../components/Loading";
-import { BACKEND_URL } from "../services/note";
+import { CalendarActivity } from "@/components/EventCalendar/CalendarType";
+import Loading from "@/components/Loading";
+import { BACKEND_URL } from "@/services/note";
 
 const ignored_ann_ids = [
   194, // 有奖问卷调查开启！
