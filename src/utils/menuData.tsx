@@ -33,7 +33,7 @@ export const menuList: menuItem[] = [
   {
     name: "FGO",
     path: "/fgo",
-    icon: "https://fgo.wiki/images/thumb/a/a2/%E6%96%AF%E5%8D%A1%E5%93%88%C2%B7%E6%96%AF%E5%8D%A1%E8%92%82%28Ruler%29_status_1.png/150px-%E6%96%AF%E5%8D%A1%E5%93%88%C2%B7%E6%96%AF%E5%8D%A1%E8%92%82%28Ruler%29_status_1.png",
+    icon: "https://media.fgo.wiki/thumb/d/da/%E5%9F%83%E5%88%97%E4%BB%80%E5%9F%BA%E4%BC%BD%E5%8B%92%28Beast%29_status_1.png/225px-%E5%9F%83%E5%88%97%E4%BB%80%E5%9F%BA%E4%BC%BD%E5%8B%92%28Beast%29_status_1.png",
     element: <FGO />,
   },
   {

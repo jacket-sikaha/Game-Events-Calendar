@@ -11,7 +11,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { menuList } from "@/utils/menuData";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -37,33 +37,40 @@ export default function ResponsiveDrawer(props: Props) {
     setMobileOpen(!mobileOpen);
   };
 
-  const drawer = (
-    <div>
-      <Toolbar />
-      <Divider />
-      <List>
-        {menuList.map(({ name, path, icon }) => (
-          <ListItem key={path} disablePadding>
-            <ListItemButton
-              className="group"
-              onClick={() => {
-                navigate(path);
-              }}
-            >
-              <ListItemIcon className="w-6 h-6 transition ease-in-out delay-100 group-hover:-translate-y-1 group-hover:scale-110 duration-300">
-                <img
-                  src={icon}
-                  alt={name}
-                  className="w-full h-full object-contain rounded-sm"
-                />
-              </ListItemIcon>
-              <ListItemText primary={name} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </div>
+  const drawer = useMemo(
+    () => (
+      <div>
+        <Toolbar />
+        <Divider />
+        <List>
+          {menuList.map(({ name, path, icon }) => (
+            <ListItem key={path} disablePadding>
+              <ListItemButton
+                className="group"
+                onClick={() => {
+                  navigate(path);
+                }}
+              >
+                <ListItemIcon className="w-6 h-6 transition ease-in-out delay-100 group-hover:-translate-y-1 group-hover:scale-110 duration-300">
+                  <img
+                    src={icon}
+                    alt={name}
+                    className="w-full h-full object-contain rounded-sm"
+                  />
+                </ListItemIcon>
+                <ListItemText primary={name} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+      </div>
+    ),
+    []
   );
+
+  const navTitle = useMemo(() => {
+    return menuList.find((item) => item.path === loc.pathname)?.name;
+  }, [loc.pathname]);
 
   const container =
     window !== undefined ? () => window().document.body : undefined;
@@ -110,7 +117,7 @@ export default function ResponsiveDrawer(props: Props) {
             </svg>
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            {menuList.find((item) => item.path === loc.pathname)?.name}
+            {navTitle}
           </Typography>
         </Toolbar>
       </AppBar>

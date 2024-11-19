@@ -27,10 +27,179 @@ function EventCalendar({ value, activity, style }: CalendarProps) {
     );
   };
 
-  const eventGridPosition = useMemo(
-    () => calculateEventPosition(currentDate, activity),
-    [currentDate, activity]
-  );
+  const scheduleArea = useMemo(() => {
+    const eventGridPosition = calculateEventPosition(currentDate, activity);
+    return (
+      <div className="flex-1 text-xs border-x border-b flex flex-col overflow-auto">
+        {generateCalendarGrid(currentDate).map((_, i) => {
+          return (
+            <div
+              className={`relative overflow-y-auto invisibleScrollbar bg-gray-200 ${
+                collapseIdx === i ? "flex-3" : "flex-1"
+              }`}
+              key={i}
+              onClick={() => setCollapseIdx(collapseIdx === i ? -1 : i)}
+            >
+              {/* 日历区 */}
+              <div className="grid grid-cols-7 sticky top-0 z-50 bg-white">
+                {_.map((__, j) => {
+                  return (
+                    <div
+                      key={j}
+                      className="w-full flex justify-center items-start even:border-x border-t"
+                    >
+                      {value.isSame(__, "day") ? (
+                        <span className="w-full text-center bg-red-500">
+                          {dayjs(__).format("D")}
+                        </span>
+                      ) : (
+                        dayjs(__).format("D")
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+              {/* 日程区 */}
+              <div>
+                {eventGridPosition[i]?.map((obj) => {
+                  const { id, title, left, width, level, color } = obj;
+                  return (
+                    <div
+                      key={id}
+                      className="absolute rounded-lg pl-2 overflow-hidden text-ellipsis whitespace-nowrap border border-cyan-50"
+                      style={{
+                        backgroundColor: color,
+                        width: `calc((${width}00%/7))`,
+                        left:
+                          left !== 0 && left !== 7 ? `calc(${left}00%/7)` : "",
+                        // top: `${20 * level + "%"}`, // 百分比受限于最上层元素的高度变化
+                        top: `${1.35 * level}em`, // em只受限于离其最近的父元素（简单嵌套情况）
+                      }}
+                    >
+                      {title}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    );
+  }, [collapseIdx, currentDate]);
+
+  const eventOverview = useMemo(() => {
+    return (
+      <div
+        className={`myScrollbar overflow-y-auto overflow-x-hidden py-3 px-4 bg-[#F8FAFC] border 
+${showActivityOverview ? "Slide" : "Slide collapsed"}`}
+      >
+        <div
+          className="mb-1 cursor-pointer transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300"
+          onClick={() => {
+            setShowActivityOverview(!showActivityOverview);
+          }}
+        >
+          <svg
+            className="mx-auto"
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+          >
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M2.5 12C2.5 11.8674 2.55268 11.7402 2.64645 11.6464C2.74021 11.5527 2.86739 11.5 3 11.5H13C13.1326 11.5 13.2598 11.5527 13.3536 11.6464C13.4473 11.7402 13.5 11.8674 13.5 12C13.5 12.1326 13.4473 12.2598 13.3536 12.3536C13.2598 12.4473 13.1326 12.5 13 12.5H3C2.86739 12.5 2.74021 12.4473 2.64645 12.3536C2.55268 12.2598 2.5 12.1326 2.5 12ZM2.5 8C2.5 7.86739 2.55268 7.74021 2.64645 7.64645C2.74021 7.55268 2.86739 7.5 3 7.5H13C13.1326 7.5 13.2598 7.55268 13.3536 7.64645C13.4473 7.74021 13.5 7.86739 13.5 8C13.5 8.13261 13.4473 8.25979 13.3536 8.35355C13.2598 8.44732 13.1326 8.5 13 8.5H3C2.86739 8.5 2.74021 8.44732 2.64645 8.35355C2.55268 8.25979 2.5 8.13261 2.5 8ZM2.5 4C2.5 3.86739 2.55268 3.74021 2.64645 3.64645C2.74021 3.55268 2.86739 3.5 3 3.5H13C13.1326 3.5 13.2598 3.55268 13.3536 3.64645C13.4473 3.74021 13.5 3.86739 13.5 4C13.5 4.13261 13.4473 4.25979 13.3536 4.35355C13.2598 4.44732 13.1326 4.5 13 4.5H3C2.86739 4.5 2.74021 4.44732 2.64645 4.35355C2.55268 4.25979 2.5 4.13261 2.5 4Z"
+              fill="#1F2937"
+            />
+          </svg>
+        </div>
+        <div>
+          {eventOverviewListSorting(levelAssignment(activity)).map(
+            (item, i) => {
+              return (
+                <div
+                  key={item.id}
+                  // tailwindcss 自定义transition写法
+                  className={`w-full mb-3 rounded-t-lg border-b-2 border-stone-950 border-dashed ${
+                    showActivityOverview
+                      ? "transition-all duration-[300ms] ease-in scale-100 break-words"
+                      : "transition-all duration-[300ms] ease-in scale-0 opacity-0 overflow-hidden"
+                  }`}
+                  // className={`w-full px-4 rounded-lg ${
+                  //   showActivityOverview ? "activityList" : "activityList collapsed"
+                  // }`}
+                >
+                  {item?.banner && (
+                    <div className="mx-auto rounded-md flex justify-center">
+                      <Image
+                        src={item?.banner}
+                        alt={item?.title}
+                        className={`object-contain max-sm:object-scale-down ${
+                          showActivityOverview
+                            ? "transition-all duration-300 ease-in opacity-100 break-words"
+                            : "transition-all duration-300 ease-in opacity-0 overflow-hidden"
+                        }`}
+                        referrerPolicy="same-origin"
+                      />
+                    </div>
+                  )}
+                  <div className="mt-2 flex flex-col items-center">
+                    <div
+                      className="text-gray-700 max-sm:text-xs"
+                      style={{
+                        textDecoration: item.isEnd ? "line-through" : "none",
+                      }}
+                    >
+                      <span
+                        className="inline-block mx-[0.2rem] rounded-full"
+                        style={{
+                          backgroundColor:
+                            rainbowColors[i % rainbowColors.length],
+                        }}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="8"
+                          height="8"
+                          viewBox="0 0 16 16"
+                          fill="none"
+                        >
+                          <g clipPath="url(#clip0_3660_20704)">
+                            <path
+                              d="M8 15C6.14348 15 4.36301 14.2625 3.05025 12.9497C1.7375 11.637 1 9.85652 1 8C1 6.14348 1.7375 4.36301 3.05025 3.05025C4.36301 1.7375 6.14348 1 8 1C9.85652 1 11.637 1.7375 12.9497 3.05025C14.2625 4.36301 15 6.14348 15 8C15 9.85652 14.2625 11.637 12.9497 12.9497C11.637 14.2625 9.85652 15 8 15ZM8 16C10.1217 16 12.1566 15.1571 13.6569 13.6569C15.1571 12.1566 16 10.1217 16 8C16 5.87827 15.1571 3.84344 13.6569 2.34315C12.1566 0.842855 10.1217 0 8 0C5.87827 0 3.84344 0.842855 2.34315 2.34315C0.842855 3.84344 0 5.87827 0 8C0 10.1217 0.842855 12.1566 2.34315 13.6569C3.84344 15.1571 5.87827 16 8 16Z"
+                              fill="#1F2937"
+                            />
+                          </g>
+                          <defs>
+                            <clipPath id="clip0_3660_20704">
+                              <rect width="16" height="16" fill="white" />
+                            </clipPath>
+                          </defs>
+                        </svg>
+                      </span>
+                      {item.title}
+                      <span>{item.isEnd && "（已结束）"}</span>
+                    </div>
+                    <div className="text-xs max-sm:text-[10px] font-mono text-gray-500">
+                      {item.range ??
+                        `${dayjs(item.start_time).format(
+                          "YYYY/MM/DD HH:mm"
+                        )} ~ ${dayjs(item.end_time).format(
+                          "YYYY/MM/DD HH:mm"
+                        )}`}
+                    </div>
+                  </div>
+                </div>
+              );
+            }
+          )}
+        </div>
+      </div>
+    );
+  }, [showActivityOverview]);
 
   return (
     <>
@@ -39,110 +208,7 @@ function EventCalendar({ value, activity, style }: CalendarProps) {
         style={{ ...style }}
       >
         {/* 活动概览列表 */}
-        <div
-          className={`myScrollbar overflow-y-auto overflow-x-hidden py-3 px-4 bg-[#F8FAFC] border 
-          ${showActivityOverview ? "Slide" : "Slide collapsed"}`}
-        >
-          <div
-            className="mb-1 cursor-pointer transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300"
-            onClick={() => {
-              setShowActivityOverview(!showActivityOverview);
-            }}
-          >
-            <svg
-              className="mx-auto"
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-            >
-              <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M2.5 12C2.5 11.8674 2.55268 11.7402 2.64645 11.6464C2.74021 11.5527 2.86739 11.5 3 11.5H13C13.1326 11.5 13.2598 11.5527 13.3536 11.6464C13.4473 11.7402 13.5 11.8674 13.5 12C13.5 12.1326 13.4473 12.2598 13.3536 12.3536C13.2598 12.4473 13.1326 12.5 13 12.5H3C2.86739 12.5 2.74021 12.4473 2.64645 12.3536C2.55268 12.2598 2.5 12.1326 2.5 12ZM2.5 8C2.5 7.86739 2.55268 7.74021 2.64645 7.64645C2.74021 7.55268 2.86739 7.5 3 7.5H13C13.1326 7.5 13.2598 7.55268 13.3536 7.64645C13.4473 7.74021 13.5 7.86739 13.5 8C13.5 8.13261 13.4473 8.25979 13.3536 8.35355C13.2598 8.44732 13.1326 8.5 13 8.5H3C2.86739 8.5 2.74021 8.44732 2.64645 8.35355C2.55268 8.25979 2.5 8.13261 2.5 8ZM2.5 4C2.5 3.86739 2.55268 3.74021 2.64645 3.64645C2.74021 3.55268 2.86739 3.5 3 3.5H13C13.1326 3.5 13.2598 3.55268 13.3536 3.64645C13.4473 3.74021 13.5 3.86739 13.5 4C13.5 4.13261 13.4473 4.25979 13.3536 4.35355C13.2598 4.44732 13.1326 4.5 13 4.5H3C2.86739 4.5 2.74021 4.44732 2.64645 4.35355C2.55268 4.25979 2.5 4.13261 2.5 4Z"
-                fill="#1F2937"
-              />
-            </svg>
-          </div>
-          <div>
-            {eventOverviewListSorting(levelAssignment(activity)).map(
-              (item, i) => {
-                return (
-                  <div
-                    key={item.id}
-                    // tailwindcss 自定义transition写法
-                    className={`w-full mb-3 rounded-t-lg border-b-2 border-stone-950 border-dashed ${
-                      showActivityOverview
-                        ? "transition-all duration-700 ease-in opacity-100 break-words"
-                        : "transition-all duration-700 ease-in opacity-0 overflow-hidden"
-                    }`}
-                    // className={`w-full px-4 rounded-lg ${
-                    //   showActivityOverview ? "activityList" : "activityList collapsed"
-                    // }`}
-                  >
-                    {item?.banner && (
-                      <div className="mx-auto rounded-md flex justify-center">
-                        <Image
-                          src={item?.banner}
-                          alt={item?.title}
-                          className="object-contain max-sm:object-scale-down"
-                          referrerPolicy="same-origin"
-                        />
-                      </div>
-                    )}
-                    <div className="mt-2 flex flex-col items-center">
-                      <div
-                        className="text-gray-700 max-sm:text-xs"
-                        style={{
-                          textDecoration: item.isEnd ? "line-through" : "none",
-                        }}
-                      >
-                        <span
-                          className="inline-block mx-[0.2rem] rounded-full"
-                          style={{
-                            backgroundColor:
-                              rainbowColors[i % rainbowColors.length],
-                          }}
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="8"
-                            height="8"
-                            viewBox="0 0 16 16"
-                            fill="none"
-                          >
-                            <g clipPath="url(#clip0_3660_20704)">
-                              <path
-                                d="M8 15C6.14348 15 4.36301 14.2625 3.05025 12.9497C1.7375 11.637 1 9.85652 1 8C1 6.14348 1.7375 4.36301 3.05025 3.05025C4.36301 1.7375 6.14348 1 8 1C9.85652 1 11.637 1.7375 12.9497 3.05025C14.2625 4.36301 15 6.14348 15 8C15 9.85652 14.2625 11.637 12.9497 12.9497C11.637 14.2625 9.85652 15 8 15ZM8 16C10.1217 16 12.1566 15.1571 13.6569 13.6569C15.1571 12.1566 16 10.1217 16 8C16 5.87827 15.1571 3.84344 13.6569 2.34315C12.1566 0.842855 10.1217 0 8 0C5.87827 0 3.84344 0.842855 2.34315 2.34315C0.842855 3.84344 0 5.87827 0 8C0 10.1217 0.842855 12.1566 2.34315 13.6569C3.84344 15.1571 5.87827 16 8 16Z"
-                                fill="#1F2937"
-                              />
-                            </g>
-                            <defs>
-                              <clipPath id="clip0_3660_20704">
-                                <rect width="16" height="16" fill="white" />
-                              </clipPath>
-                            </defs>
-                          </svg>
-                        </span>
-                        {item.title}
-                        <span>{item.isEnd && "（已结束）"}</span>
-                      </div>
-                      <div className="text-xs max-sm:text-[10px] font-mono text-gray-500">
-                        {item.range ??
-                          `${dayjs(item.start_time).format(
-                            "YYYY/MM/DD HH:mm"
-                          )} ~ ${dayjs(item.end_time).format(
-                            "YYYY/MM/DD HH:mm"
-                          )}`}
-                      </div>
-                    </div>
-                  </div>
-                );
-              }
-            )}
-          </div>
-        </div>
+        {eventOverview}
 
         {/* 日历日程显示 */}
         <div className="flex-1 p-5 border flex flex-col">
@@ -206,63 +272,7 @@ function EventCalendar({ value, activity, style }: CalendarProps) {
                   这种规则下跑出父元素宽高范围的子元素会撑开父元素来实现滚动（父元素还是原本的宽高，只多了滚动条）。
                   这样就能在每个日期下面的有限范围里展示我们的日程，
                   显示不完的也可以滚动下拉 */}
-          <div className="flex-1 text-xs border-x border-b flex flex-col overflow-auto">
-            {generateCalendarGrid(currentDate).map((_, i) => {
-              return (
-                <div
-                  className={`relative overflow-y-auto invisibleScrollbar bg-gray-200 ${
-                    collapseIdx === i ? "flex-3" : "flex-1"
-                  }`}
-                  key={i}
-                  onClick={() => setCollapseIdx(collapseIdx === i ? -1 : i)}
-                >
-                  {/* 日历区 */}
-                  <div className="grid grid-cols-7 sticky top-0 z-50 bg-white">
-                    {_.map((__, j) => {
-                      return (
-                        <div
-                          key={j}
-                          className="w-full flex justify-center items-start even:border-x border-t"
-                        >
-                          {value.isSame(__, "day") ? (
-                            <span className="w-full text-center bg-red-500">
-                              {dayjs(__).format("D")}
-                            </span>
-                          ) : (
-                            dayjs(__).format("D")
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                  {/* 日程区 */}
-                  <div>
-                    {eventGridPosition[i]?.map((obj) => {
-                      const { id, title, left, width, level, color } = obj;
-                      return (
-                        <div
-                          key={id}
-                          className="absolute rounded-lg pl-2 overflow-hidden text-ellipsis whitespace-nowrap border border-cyan-50"
-                          style={{
-                            backgroundColor: color,
-                            width: `calc((${width}00%/7))`,
-                            left:
-                              left !== 0 && left !== 7
-                                ? `calc(${left}00%/7)`
-                                : "",
-                            // top: `${20 * level + "%"}`, // 百分比受限于最上层元素的高度变化
-                            top: `${1.35 * level}em`, // em只受限于离其最近的父元素（简单嵌套情况）
-                          }}
-                        >
-                          {title}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          {scheduleArea}
         </div>
       </div>
     </>
