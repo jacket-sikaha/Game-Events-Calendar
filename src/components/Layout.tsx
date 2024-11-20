@@ -69,7 +69,11 @@ export default function ResponsiveDrawer(props: Props) {
   );
 
   const navTitle = useMemo(() => {
-    return menuList.find((item) => item.path === loc.pathname)?.name;
+    return (
+      <Typography variant="h6" noWrap component="div">
+        {menuList.find((item) => item.path === loc.pathname)?.name}
+      </Typography>
+    );
   }, [loc.pathname]);
 
   const container =
@@ -116,9 +120,7 @@ export default function ResponsiveDrawer(props: Props) {
               </defs>
             </svg>
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            {navTitle}
-          </Typography>
+          {navTitle}
         </Toolbar>
       </AppBar>
       <Box
@@ -165,9 +167,9 @@ export default function ResponsiveDrawer(props: Props) {
           flexGrow: 1,
           p: 3,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
+          paddingTop: 8,
         }}
       >
-        <Box sx={{ height: 48 }} />
         {children}
       </Box>
     </Box>
